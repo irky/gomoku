@@ -18,6 +18,14 @@ Board::Board(QObject *parent) : QGraphicsScene(parent)
     }
 }
 
+Board::Board(const Board&)
+{
+}
+
+Board::Board()
+{
+}
+
 void Board::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     std::pair<int,int> approxPoint;

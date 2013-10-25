@@ -6,6 +6,14 @@ Game::Game()
     gameBoard = new QGenericMatrix<15,15,int>();
 }
 
+Game::Game(const Game &)
+{
+}
+
+Game::Game(QObject *parent) : QObject(parent)
+{
+}
+
 void Game::userMove(const QPointF &point)
 {
 
@@ -17,7 +25,7 @@ void Game::checkIfMovePossible()
     emit allowUserMove();
 }
 
-void Game::allowUserMove()
+void Game::allowUserMove(int x, int y)
 {
     qDebug() << "User move allowed";
 }

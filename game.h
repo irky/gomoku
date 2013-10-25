@@ -4,6 +4,7 @@
 #include <QGenericMatrix>
 #include "board.h"
 #include <QObject>
+#include <QMetaType>
 
 class Game : public QObject
 {
@@ -11,13 +12,15 @@ class Game : public QObject
 
 public:
     Game();
+    Game(const Game&);
+    Game(QObject *parent);
 
 public slots:
     void userMove(const QPointF &point);
     void checkIfMovePossible();
 
 signals:
-    void allowUserMove();
+    void allowUserMove(int x=0, int y=0);
 
 private:
     bool userMoveAllowed;

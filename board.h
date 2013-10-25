@@ -14,8 +14,11 @@
 
 class Board : public QGraphicsScene
 {
+    Q_OBJECT
 public:
     Board(QObject *parent);
+    Board(const Board&);
+    Board();
 
 public slots:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);

@@ -6,6 +6,8 @@
 #include <QtGui>
 #include <QGraphicsScene>
 #include <QMessageBox>
+#include <QMetaType>
+
 #include "board.h"
 #include "game.h"
 
