@@ -31,7 +31,6 @@ private:
     Ui::Dialog *ui;
     QGraphicsView *view;
     Board *board;
-    Game *game;
 };
 
 #endif // DIALOG_H

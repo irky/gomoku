@@ -10,13 +10,7 @@ Dialog::Dialog(QWidget *parent) :
     board = new Board(this);
     ui->graphicsView->setScene(board);
 
-    game = new Game(this);
-
     resize(530,550);
-
-    connect(board, SIGNAL(userMoveRequest()), game, SLOT(checkIfMovePossible()));
-    connect(game, SIGNAL(allowUserMove(int,int)),board,SLOT(drawUserMove(int,int)));
-    //connect(board, SIGNAL(userMoveRequest()), game, SIGNAL(allowUserMove()));
 }
 
 Dialog::~Dialog()
@@ -24,7 +18,6 @@ Dialog::~Dialog()
     delete ui;
     delete view;
     delete board;
-    delete game;
 }
 
 void Dialog::on_infoButton_clicked()

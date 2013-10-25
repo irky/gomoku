@@ -2,6 +2,8 @@
 
 Board::Board(QObject *parent) : QGraphicsScene(parent)
 {
+    game = new Game();
+
     circlesTable.reserve(getBoardSize());
     for(int i = 0; i < getBoardSize(); i++)
     {
@@ -16,30 +18,29 @@ Board::Board(QObject *parent) : QGraphicsScene(parent)
         }
         circlesTable.push_back(vect);
     }
+
+    connect(this, SIGNAL(CPUMoveRequest()), game, SLOT(countCPUMove()));
+    connect(game, SIGNAL(drawCPUMoveRequest()), this, SLOT(drawCPUMove()));
+
 }
 
-Board::Board(const Board&)
+Board::~Board()
 {
-}
-
-Board::Board()
-{
+    delete game;
 }
 
 void Board::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    std::pair<int,int> approxPoint;
-    approxPoint.first = getGridStep();
-    approxPoint.second = getGridStep();
-    QPointF point = event->scenePos();
-    findClickedCircle(point.x(), point.y(), approxPoint);
-
-    // drawUserMove(approxPoint.first, approxPoint.second);
-    // emit signal and send to game slot about user wants to move
-    emit userMoveRequest();
-    // check if move is possilbe
-    // send from game to board information about possibility
-    // draw move or not
+    if(game->isUserMoveAllowed())
+    {
+        std::pair<int,int> approxPoint;
+        approxPoint.first = getGridStep();
+        approxPoint.second = getGridStep();
+        QPointF point = event->scenePos();
+        findClickedCircle(point.x(), point.y(), approxPoint);
+        drawUserMove(approxPoint.first, approxPoint.second);
+        emit CPUMoveRequest();
+    }
 }
 
 void Board::drawBackground(QPainter *painter, const QRectF &rect)
@@ -95,12 +96,24 @@ void Board::findClickedCircle(int x, int y, std::pair<int,int>& wynik) const
 
 void Board::drawUserMove(int row, int column)
 {
+    qDebug() << " x " << row << " y " << column;
     addEllipse(row-13,column-13,getGridStep()-4,getGridStep()-4, QPen(Qt::blue), QBrush(Qt::blue));
+    std::pair<int,int> boardPoint = game->countGameBoardCoordinates(row, column);
+    qDebug() << "przeliczone x " << boardPoint.first << " przeliczone y " << boardPoint.second;
+    game->updateGameBoard(boardPoint.first-1, boardPoint.second-1, game->getUserValue());
+    game->setUserMoveAllowed(false);
+    qDebug() << "drawing user move finished";
 }
 
-void Board::userMoveRequest()
+void Board::drawCPUMove()
 {
-    qDebug() << "User move request sent";
+    qDebug() << "drawing CPU Move";
+    QPointF point = game->countCPUBoardPoint();
+    qDebug() << " x " << point.x() << " y " << point.y();
+    addEllipse(point.x()+2,point.y()+2,getGridStep()-4,getGridStep()-4, QPen(Qt::red), QBrush(Qt::red));
+    std::pair<int,int> boardPoint = game->countGameBoardCoordinates(point.x(), point.y());
+    game->updateGameBoard(boardPoint.first, boardPoint.second, game->getCPUValue());
+    game->setUserMoveAllowed(true);
 }
 
 int Board::getBoardSize() const

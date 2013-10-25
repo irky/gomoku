@@ -1,33 +1,51 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include <QGenericMatrix>
-#include "board.h"
+#include <cstdlib>
+#include <vector>
+
 #include <QObject>
 #include <QMetaType>
+#include <QPointF>
+#include <QDebug>
 
 class Game : public QObject
 {
     Q_OBJECT
+    friend class Board;
 
 public:
     Game();
-    Game(const Game&);
-    Game(QObject *parent);
+
+    int getCPUValue() const;
+    int getUserValue() const;
+    std::pair<int,int> getCPUCoordinates() const;
+    std::pair<int,int> countGameBoardCoordinates(const int &row, const int &column) const;
 
 public slots:
-    void userMove(const QPointF &point);
-    void checkIfMovePossible();
+    void countCPUMove();
 
 signals:
-    void allowUserMove(int x=0, int y=0);
+    void drawCPUMoveRequest();
 
 private:
-    bool userMoveAllowed;
+    void setUserMoveAllowed(bool value);
+    bool isUserMoveAllowed() const;
+    void updateGameBoard(const int &x, const int &y, const int &who);
+    bool checkIfMovePossible(const int &row, const int &col);
     void cpuMove();
-    void countCPUMove();
-    void updateGameBoard();
-    QGenericMatrix<15,15,int> *gameBoard;
+
+    bool userMoveAllowed;
+
+    std::vector< std::vector<int> > gameBoard;
+
+    std::pair<int,int> CPUCoordinates;
+    void setCPUCoordinates(const std::pair<int, int> &coord);
+    QPointF countCPUBoardPoint() const;
+
+    const static int USER = 1;
+    const static int CPU = -1;
+
 };
 
 #endif // GAME_H
