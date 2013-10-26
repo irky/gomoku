@@ -9,6 +9,8 @@
 #include <QPointF>
 #include <QDebug>
 
+#include "constants.h"
+
 class Game : public QObject
 {
     Q_OBJECT
@@ -17,35 +19,28 @@ class Game : public QObject
 public:
     Game();
 
-    int getCPUValue() const;
-    int getUserValue() const;
     std::pair<int,int> getCPUCoordinates() const;
     std::pair<int,int> countGameBoardCoordinates(const int &row, const int &column) const;
 
 public slots:
     void countCPUMove();
+    void countUserMove(const int &row, const int &col);
 
 signals:
-    void drawCPUMoveRequest();
+    void drawCPUMoveRequest(const int&, const int&);
+    void drawUserMoveRequest(const int&, const int&);
 
 private:
     void setUserMoveAllowed(bool value);
     bool isUserMoveAllowed() const;
     void updateGameBoard(const int &x, const int &y, const int &who);
     bool checkIfMovePossible(const int &row, const int &col);
-    void cpuMove();
+    int countSingleCoordinate(const int &row) const;
+    QPointF countBoardPoint(const int &row, const int &col) const;
 
     bool userMoveAllowed;
 
     std::vector< std::vector<int> > gameBoard;
-
-    std::pair<int,int> CPUCoordinates;
-    void setCPUCoordinates(const std::pair<int, int> &coord);
-    QPointF countCPUBoardPoint() const;
-
-    const static int USER = 1;
-    const static int CPU = -1;
-
 };
 
 #endif // GAME_H

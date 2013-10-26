@@ -4,24 +4,25 @@ Board::Board(QObject *parent) : QGraphicsScene(parent)
 {
     game = new Game();
 
-    circlesTable.reserve(getBoardSize());
-    for(int i = 0; i < getBoardSize(); i++)
+    circlesTable.reserve(BOARD_SIZE);
+    for(int i = 0; i < BOARD_SIZE; i++)
     {
         std::vector<std::pair<int,int> > vect;
-        vect.reserve(getBoardSize());
-        for(int j = 0; j < getBoardSize(); j++)
+        vect.reserve(BOARD_SIZE);
+        for(int j = 0; j < BOARD_SIZE; j++)
         {
             std::pair<int,int> p;
-            p.first = -210 + i*getGridStep();
-            p.second = -210 + j*getGridStep();
+            p.first = FIRST_GRID_CENTRE + i*GRID_STEP;
+            p.second = FIRST_GRID_CENTRE + j*GRID_STEP;
             vect.push_back(p);
         }
         circlesTable.push_back(vect);
     }
 
+    connect(this, SIGNAL(userMoveRequest(int,int)), game, SLOT(countUserMove(int,int)));
+    connect(game, SIGNAL(drawUserMoveRequest(int,int)), this, SLOT(drawUserMove(int,int)));
     connect(this, SIGNAL(CPUMoveRequest()), game, SLOT(countCPUMove()));
-    connect(game, SIGNAL(drawCPUMoveRequest()), this, SLOT(drawCPUMove()));
-
+    connect(game, SIGNAL(drawCPUMoveRequest(int,int)), this, SLOT(drawCPUMove(int,int)));
 }
 
 Board::~Board()
@@ -34,12 +35,10 @@ void Board::mousePressEvent(QGraphicsSceneMouseEvent *event)
     if(game->isUserMoveAllowed())
     {
         std::pair<int,int> approxPoint;
-        approxPoint.first = getGridStep();
-        approxPoint.second = getGridStep();
+        approxPoint.first = GRID_STEP;
+        approxPoint.second = GRID_STEP;
         QPointF point = event->scenePos();
         findClickedCircle(point.x(), point.y(), approxPoint);
-        drawUserMove(approxPoint.first, approxPoint.second);
-        emit CPUMoveRequest();
     }
 }
 
@@ -49,15 +48,10 @@ void Board::drawBackground(QPainter *painter, const QRectF &rect)
     drawEmptyEllipses(painter);
 }
 
-int Board::getGridStep() const
-{
-    return GRID_STEP;
-}
-
 void Board::drawGrid(QPainter *painter)
 {
     painter->setPen(QPen(QColor(0, 0, 0, 125)));
-    for(int i = -225; i < 15*getGridStep(); i+= getGridStep())
+    for(int i = -225; i < BOARD_SIZE*GRID_STEP; i+= GRID_STEP)
     {
         painter->drawLine(i,-225,i,225);
         painter->drawLine(-225,i,225,i);
@@ -67,20 +61,20 @@ void Board::drawGrid(QPainter *painter)
 void Board::drawEmptyEllipses(QPainter *painter)
 {
     painter->setPen(QPen(QColor(255, 255, 255, 255)));
-    for(int i = -225; i < 15*getGridStep()-225; i+= getGridStep())
+    for(int i = FIRST_GRID_CENTRE; i < BOARD_SIZE*GRID_STEP + FIRST_GRID_CENTRE; i+= GRID_STEP)
     {
-        for(int j = -225; j < 15*getGridStep()-225; j+= getGridStep())
+        for(int j = FIRST_GRID_CENTRE; j < BOARD_SIZE*GRID_STEP + FIRST_GRID_CENTRE; j+= GRID_STEP)
         {
-            addEllipse(i+2,j+2,getGridStep()-4,getGridStep()-4, painter->pen());
+            addEllipse(i-(DIAMETER/2), j-(DIAMETER/2), DIAMETER, DIAMETER, painter->pen());
         }
     }
 }
 
-void Board::findClickedCircle(int x, int y, std::pair<int,int>& wynik) const
+void Board::findClickedCircle(int x, int y, std::pair<int,int>& wynik)
 {
-    for(int i = 0; i < getBoardSize(); i++)
+    for(int i = 0; i < BOARD_SIZE; i++)
     {
-        for(int j = 0; j < getBoardSize(); j++)
+        for(int j = 0; j < BOARD_SIZE; j++)
         {
             if(abs(circlesTable[i][j].first - x) < abs(wynik.first - x))
             {
@@ -92,31 +86,18 @@ void Board::findClickedCircle(int x, int y, std::pair<int,int>& wynik) const
             }
         }
     }
+    emit userMoveRequest(wynik.first, wynik.second);
 }
 
-void Board::drawUserMove(int row, int column)
+bool Board::drawUserMove(const int &row, const int &column)
 {
-    qDebug() << " x " << row << " y " << column;
-    addEllipse(row-13,column-13,getGridStep()-4,getGridStep()-4, QPen(Qt::blue), QBrush(Qt::blue));
-    std::pair<int,int> boardPoint = game->countGameBoardCoordinates(row, column);
-    qDebug() << "przeliczone x " << boardPoint.first << " przeliczone y " << boardPoint.second;
-    game->updateGameBoard(boardPoint.first-1, boardPoint.second-1, game->getUserValue());
+    addEllipse(row-(DIAMETER/2), column-(DIAMETER/2), DIAMETER, DIAMETER, QPen(Qt::blue), QBrush(Qt::blue));
     game->setUserMoveAllowed(false);
-    qDebug() << "drawing user move finished";
+    emit CPUMoveRequest();
 }
 
-void Board::drawCPUMove()
+void Board::drawCPUMove(const int &row, const int &column)
 {
-    qDebug() << "drawing CPU Move";
-    QPointF point = game->countCPUBoardPoint();
-    qDebug() << " x " << point.x() << " y " << point.y();
-    addEllipse(point.x()+2,point.y()+2,getGridStep()-4,getGridStep()-4, QPen(Qt::red), QBrush(Qt::red));
-    std::pair<int,int> boardPoint = game->countGameBoardCoordinates(point.x(), point.y());
-    game->updateGameBoard(boardPoint.first, boardPoint.second, game->getCPUValue());
+    addEllipse(row-(DIAMETER/2), column-(DIAMETER/2) ,DIAMETER, DIAMETER, QPen(Qt::red), QBrush(Qt::red));
     game->setUserMoveAllowed(true);
-}
-
-int Board::getBoardSize() const
-{
-    return BOARD_SIZE;
 }

@@ -17,16 +17,6 @@ Game::Game()
     }
 }
 
-int Game::getCPUValue() const
-{
-    return CPU;
-}
-
-int Game::getUserValue() const
-{
-    return USER;
-}
-
 void Game::setUserMoveAllowed(bool value)
 {
     userMoveAllowed = value;
@@ -39,7 +29,6 @@ bool Game::isUserMoveAllowed() const
 
 bool Game::checkIfMovePossible(const int &row, const int &col)
 {
-    qDebug() << "Checking if move possible";
     if(!gameBoard[row][col])
     {
         return true;
@@ -50,22 +39,11 @@ bool Game::checkIfMovePossible(const int &row, const int &col)
     }
 }
 
-void Game::setCPUCoordinates(const std::pair<int, int> &coord)
-{
-    CPUCoordinates = coord;
-}
-
 // row and col in game board
-QPointF Game::countCPUBoardPoint() const
+QPointF Game::countBoardPoint(const int &row, const int &col) const
 {
-    QPointF point(-225+(30*CPUCoordinates.first), -225+(30*CPUCoordinates.second));
-    qDebug() << " coordinate x " << point.x() << " coordinate y " << point.y();
+    QPointF point(FIRST_GRID_CENTRE+(GRID_STEP*row), FIRST_GRID_CENTRE+(GRID_STEP*col));
     return point;
-}
-
-void Game::cpuMove()
-{
-    emit drawCPUMoveRequest();
 }
 
 // algorithm to CPU's move
@@ -78,12 +56,23 @@ void Game::countCPUMove()
         {
             if(checkIfMovePossible(i,j))
             {
-                qDebug() << " row " << i << " col " << j;
-                setCPUCoordinates(std::pair<int,int>(i,j));
-                cpuMove();
+                updateGameBoard(i, j, CPU);
+                QPointF point = countBoardPoint(i,j);
+                emit drawCPUMoveRequest(point.x(), point.y());
                 return;
             }
         }
+    }
+}
+
+void Game::countUserMove(const int &row, const int &col)
+{
+    std::pair<int, int> boardPoint = countGameBoardCoordinates(row, col);
+    if(checkIfMovePossible(boardPoint.first, boardPoint.second))
+    {
+        updateGameBoard(boardPoint.first, boardPoint.second, USER);
+        setUserMoveAllowed(false);
+        emit drawUserMoveRequest(row, col);
     }
 }
 
@@ -93,27 +82,20 @@ void Game::updateGameBoard(const int &x, const int &y, const int &who)
 }
 
 
-std::pair<int, int> Game::countGameBoardCoordinates(const int &row, const int &column) const
+int Game::countSingleCoordinate(const int &row) const
 {
-    int coordinate_counter = -225;
+    int coordinateCounter = FIRST_GRID_CENTRE;
     int x = 0;
-    int y = 0;
-
-    while(coordinate_counter < row)
+    while(coordinateCounter < row)
     {
         x++;
-        coordinate_counter += 30;
+        coordinateCounter += GRID_STEP;
     }
-    qDebug() << "point first " << x;
+    return x;
+}
 
-    coordinate_counter = -225;
-    while(coordinate_counter < column)
-    {
-        y++;
-        coordinate_counter += 30;
-    }
-    qDebug() << "point first " << y;
-
-    std::pair<int, int> point(x,y);
+std::pair<int, int> Game::countGameBoardCoordinates(const int &row, const int &column) const
+{
+    std::pair<int, int> point(countSingleCoordinate(row), countSingleCoordinate(column));
     return point;
 }

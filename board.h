@@ -13,6 +13,7 @@
 #include <vector>
 
 #include "game.h"
+#include "constants.h"
 
 class Board : public QGraphicsScene
 {
@@ -21,28 +22,24 @@ public:
     Board(QObject *parent);
     ~Board();
 
-    int getBoardSize() const;
-    int getGridStep() const;
-
 public slots:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
-    void drawCPUMove();
+    void drawCPUMove(const int &row, const int &column);
+    bool drawUserMove(const int &row, const int &column);
 
 signals:
     void CPUMoveRequest();
-    void updateGameBoardRequest();
+    void userMoveRequest(const int&, const int&);
+    void updateGameBoardRequest(const int&,const int&, const int&);
 
 protected:
    void drawBackground(QPainter * painter, const QRectF & rect);
    void drawGrid(QPainter * painter);
    void drawEmptyEllipses(QPainter *painter);
-   void findClickedCircle(int row, int column, std::pair<int,int> &point) const;
-   void drawUserMove(int row, int column);
+   void findClickedCircle(int row, int column, std::pair<int,int> &point);
 
 private:
    std::vector< std::vector <std::pair<int,int> > > circlesTable;
-   static const int BOARD_SIZE = 15;
-   static const int GRID_STEP = 30;
    Game *game;
 
 };

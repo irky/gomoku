@@ -1,6 +1,6 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2013-10-09T23:34:25
+# Project created by QtCreator 20(DIAMETER/2)-10-09T23:34:25
 #
 #-------------------------------------------------
 
@@ -20,6 +20,7 @@ SOURCES += main.cpp\
 HEADERS  += dialog.h \
     plansza.h \
     board.h \
-    game.h
+    game.h \
+    constants.h
 
 FORMS    += dialog.ui
