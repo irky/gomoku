@@ -2,8 +2,6 @@
 
 Game::Game()
 {
-    userMoveAllowed = true;
-
     gameBoard.reserve(15);
     for(int i = 0; i < 15; i++)
     {
@@ -15,16 +13,6 @@ Game::Game()
         }
         gameBoard.push_back(vect);
     }
-}
-
-void Game::setUserMoveAllowed(bool value)
-{
-    userMoveAllowed = value;
-}
-
-bool Game::isUserMoveAllowed() const
-{
-    return userMoveAllowed;
 }
 
 bool Game::checkIfMovePossible(const int &row, const int &col)
@@ -71,7 +59,6 @@ void Game::countUserMove(const int &row, const int &col)
     if(checkIfMovePossible(boardPoint.first, boardPoint.second))
     {
         updateGameBoard(boardPoint.first, boardPoint.second, USER);
-        setUserMoveAllowed(false);
         emit drawUserMoveRequest(row, col);
     }
 }

@@ -20,12 +20,11 @@ class Board : public QGraphicsScene
     Q_OBJECT
 public:
     Board(QObject *parent);
-    ~Board();
 
 public slots:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void drawCPUMove(const int &row, const int &column);
-    bool drawUserMove(const int &row, const int &column);
+    void drawUserMove(const int &row, const int &column);
 
 signals:
     void CPUMoveRequest();
@@ -40,8 +39,10 @@ protected:
 
 private:
    std::vector< std::vector <std::pair<int,int> > > circlesTable;
-   Game *game;
 
+   bool userMoveAllowed;
+   void setUserMoveAllowed(bool value);
+   bool isUserMoveAllowed() const;
 };
 
 #endif // BOARD_H

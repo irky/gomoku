@@ -2,7 +2,7 @@
 
 Board::Board(QObject *parent) : QGraphicsScene(parent)
 {
-    game = new Game();
+    userMoveAllowed = true;
 
     circlesTable.reserve(BOARD_SIZE);
     for(int i = 0; i < BOARD_SIZE; i++)
@@ -18,21 +18,11 @@ Board::Board(QObject *parent) : QGraphicsScene(parent)
         }
         circlesTable.push_back(vect);
     }
-
-    connect(this, SIGNAL(userMoveRequest(int,int)), game, SLOT(countUserMove(int,int)));
-    connect(game, SIGNAL(drawUserMoveRequest(int,int)), this, SLOT(drawUserMove(int,int)));
-    connect(this, SIGNAL(CPUMoveRequest()), game, SLOT(countCPUMove()));
-    connect(game, SIGNAL(drawCPUMoveRequest(int,int)), this, SLOT(drawCPUMove(int,int)));
-}
-
-Board::~Board()
-{
-    delete game;
 }
 
 void Board::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    if(game->isUserMoveAllowed())
+    if(isUserMoveAllowed())
     {
         std::pair<int,int> approxPoint;
         approxPoint.first = GRID_STEP;
@@ -89,15 +79,25 @@ void Board::findClickedCircle(int x, int y, std::pair<int,int>& wynik)
     emit userMoveRequest(wynik.first, wynik.second);
 }
 
-bool Board::drawUserMove(const int &row, const int &column)
+void Board::setUserMoveAllowed(bool value)
+{
+    userMoveAllowed = value;
+}
+
+bool Board::isUserMoveAllowed() const
+{
+    return userMoveAllowed;
+}
+
+void Board::drawUserMove(const int &row, const int &column)
 {
     addEllipse(row-(DIAMETER/2), column-(DIAMETER/2), DIAMETER, DIAMETER, QPen(Qt::blue), QBrush(Qt::blue));
-    game->setUserMoveAllowed(false);
+    setUserMoveAllowed(false);
     emit CPUMoveRequest();
 }
 
 void Board::drawCPUMove(const int &row, const int &column)
 {
     addEllipse(row-(DIAMETER/2), column-(DIAMETER/2) ,DIAMETER, DIAMETER, QPen(Qt::red), QBrush(Qt::red));
-    game->setUserMoveAllowed(true);
+    setUserMoveAllowed(true);
 }

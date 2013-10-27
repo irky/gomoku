@@ -31,14 +31,10 @@ signals:
     void drawUserMoveRequest(const int&, const int&);
 
 private:
-    void setUserMoveAllowed(bool value);
-    bool isUserMoveAllowed() const;
     void updateGameBoard(const int &x, const int &y, const int &who);
     bool checkIfMovePossible(const int &row, const int &col);
     int countSingleCoordinate(const int &row) const;
     QPointF countBoardPoint(const int &row, const int &col) const;
-
-    bool userMoveAllowed;
 
     std::vector< std::vector<int> > gameBoard;
 };
