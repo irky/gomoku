@@ -2,7 +2,7 @@
 
 Board::Board(QObject *parent) : QGraphicsScene(parent)
 {
-    userMoveAllowed = true;
+    userMoveAllowed = false;
 
     circlesTable.reserve(BOARD_SIZE);
     for(int i = 0; i < BOARD_SIZE; i++)
@@ -58,6 +58,19 @@ void Board::drawEmptyEllipses(QPainter *painter)
             addEllipse(i-(DIAMETER/2), j-(DIAMETER/2), DIAMETER, DIAMETER, painter->pen());
         }
     }
+}
+
+void Board::cleanBoardAndGameStatus()
+{
+    setUserMoveAllowed(false);
+    for(int i = FIRST_GRID_CENTRE; i< BOARD_SIZE*GRID_STEP + FIRST_GRID_CENTRE; i+= GRID_STEP)
+    {
+        for(int j = FIRST_GRID_CENTRE; j< BOARD_SIZE*GRID_STEP + FIRST_GRID_CENTRE; j+= GRID_STEP)
+        {
+            addEllipse(i-(DIAMETER/2), j-(DIAMETER/2), DIAMETER, DIAMETER, QPen(QColor(255, 255, 255, 255)), QBrush(QColor(255, 255, 255, 255)));
+        }
+    }
+    emit stopGame(true);
 }
 
 void Board::findClickedCircle(int x, int y, std::pair<int,int>& wynik)

@@ -6,7 +6,7 @@
 #include <QtGui>
 #include <QGraphicsScene>
 #include <QMessageBox>
-#include <QMetaType>
+#include <QPainter>
 
 #include "board.h"
 #include "game.h"
@@ -22,10 +22,18 @@ class Dialog : public QDialog
 public:
     explicit Dialog(QWidget *parent = 0);
     ~Dialog();
+
+signals:
+    void clearBoard();
+    void letCPUBegin();
     
 private slots:
 
     void on_infoButton_clicked();
+
+    void on_stopButton_clicked();
+
+    void on_startGameButton_clicked();
 
 private:
     Ui::Dialog *ui;

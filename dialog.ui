@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>42</x>
@@ -33,24 +33,18 @@
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="stopButton">
+        <property name="text">
+         <string>Stop game</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="quitButton">
         <property name="text">
          <string>Quit</string>
         </property>
        </widget>
-      </item>
-      <item>
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>158</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
       </item>
       <item>
        <widget class="QPushButton" name="infoButton">

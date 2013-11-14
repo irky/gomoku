@@ -25,6 +25,7 @@ public:
 public slots:
     void countCPUMove();
     void countUserMove(const int &row, const int &col);
+    void clearGameStatus(const bool &value);
 
 signals:
     void drawCPUMoveRequest(const int&, const int&);
@@ -35,8 +36,11 @@ private:
     bool checkIfMovePossible(const int &row, const int &col);
     int countSingleCoordinate(const int &row) const;
     QPointF countBoardPoint(const int &row, const int &col) const;
+    bool checkIfWinConfiguration();
 
     std::vector< std::vector<int> > gameBoard;
+    bool gameFinished;
+    void setGameFinished(const bool &value);
 };
 
 #endif // GAME_H

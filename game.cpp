@@ -2,17 +2,19 @@
 
 Game::Game()
 {
-    gameBoard.reserve(15);
-    for(int i = 0; i < 15; i++)
+    gameBoard.reserve(BOARD_SIZE);
+    for(int i = 0; i < BOARD_SIZE; i++)
     {
         std::vector<int> vect;
         vect.reserve(15);
-        for(int j = 0; j < 15; j++)
+        for(int j = 0; j < BOARD_SIZE; j++)
         {
             vect.push_back(0);
         }
         gameBoard.push_back(vect);
     }
+
+    gameFinished = false;
 }
 
 bool Game::checkIfMovePossible(const int &row, const int &col)
@@ -34,13 +36,48 @@ QPointF Game::countBoardPoint(const int &row, const int &col) const
     return point;
 }
 
+bool Game::checkIfWinConfiguration()
+{
+    unsigned int stoneCounter = 0;
+    for(int i = 0; i < BOARD_SIZE; i++)
+    {
+        for(int j = 0; j < BOARD_SIZE; j++)
+        {
+            if(gameBoard[i][j] == CPU)
+            {
+                stoneCounter++;
+                if(stoneCounter == 5)
+                {
+                    qDebug() << "Cpu Wins";
+                    setGameFinished(true);
+                }
+            }
+            else if(gameBoard[i][j] == USER)
+            {
+                stoneCounter++;
+                if(stoneCounter == 5)
+                {
+                    qDebug() << "User Wins";
+                    setGameFinished(true);
+                }
+            }
+            stoneCounter = 0;
+        }
+    }
+}
+
+void Game::setGameFinished(const bool &value)
+{
+    gameFinished = value;
+}
+
 // algorithm to CPU's move
 // returns best possible move coordinates
 void Game::countCPUMove()
 {
-    for(int i = 0; i < 15; i++)
+    for(int i = 0; i < BOARD_SIZE; i++)
     {
-        for(int j = 0; j < 15; j++)
+        for(int j = 0; j < BOARD_SIZE; j++)
         {
             if(checkIfMovePossible(i,j))
             {
@@ -61,6 +98,19 @@ void Game::countUserMove(const int &row, const int &col)
         updateGameBoard(boardPoint.first, boardPoint.second, USER);
         emit drawUserMoveRequest(row, col);
     }
+}
+
+void Game::clearGameStatus(const bool &value)
+{
+    setGameFinished(value);
+    for(int i = 0; i < BOARD_SIZE; i++)
+    {
+        for(int j = 0; j < BOARD_SIZE; j++)
+        {
+            gameBoard[i][j] = 0;
+        }
+    }
+
 }
 
 void Game::updateGameBoard(const int &x, const int &y, const int &who)
