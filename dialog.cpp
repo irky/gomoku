@@ -42,13 +42,16 @@ void Dialog::on_infoButton_clicked()
 void Dialog::on_stopButton_clicked()
 {
     // stop game - clear all game data
+    ui->startGameButton->setEnabled(true);
+    ui->stopButton->setEnabled(false);
     emit clearBoard();
 }
 
 void Dialog::on_startGameButton_clicked()
 {
     QMessageBox::StandardButton reply = QMessageBox::question(this, "Start Game", "Can CPU begin?", QMessageBox::Yes | QMessageBox::No);
-
+    ui->startGameButton->setEnabled(false);
+    ui->stopButton->setEnabled(true);
     if(reply == QMessageBox::Yes)
     {
         // let CPU begin
