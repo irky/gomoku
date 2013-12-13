@@ -36,34 +36,135 @@ QPointF Game::countBoardPoint(const int &row, const int &col) const
     return point;
 }
 
-bool Game::checkIfWinConfiguration()
+bool Game::checkIfWinConfiguration(const int& who)
+{
+    if(checkWinHorizontal(who) || checkWinVertical(who) || checkWinDiagonal(who))
+    {
+        return true;
+    }
+    return false;
+}
+
+bool Game::checkWinHorizontal(const int& who)
 {
     unsigned int stoneCounter = 0;
     for(int i = 0; i < BOARD_SIZE; i++)
     {
         for(int j = 0; j < BOARD_SIZE; j++)
         {
-            if(gameBoard[i][j] == CPU)
+            if(gameBoard[j][i] == who)
             {
                 stoneCounter++;
                 if(stoneCounter == 5)
                 {
-                    qDebug() << "Cpu Wins";
                     setGameFinished(true);
+                    return true;
                 }
+                continue;
             }
-            else if(gameBoard[i][j] == USER)
+            else
             {
-                stoneCounter++;
-                if(stoneCounter == 5)
-                {
-                    qDebug() << "User Wins";
-                    setGameFinished(true);
-                }
+                stoneCounter = 0;
             }
-            stoneCounter = 0;
         }
     }
+    return false;
+}
+
+bool Game::checkWinVertical(const int& who)
+{
+    unsigned int stoneCounter = 0;
+    for(int i = 0; i < BOARD_SIZE; i++)
+    {
+        for(int j = 0; j < BOARD_SIZE; j++)
+        {
+            if(gameBoard[i][j] == who)
+            {
+                stoneCounter++;
+                if(stoneCounter == 5)
+                {
+                    setGameFinished(true);
+                    return true;
+                }
+                continue;
+            }
+            else
+            {
+                stoneCounter = 0;
+            }
+        }
+    }
+    return false;
+}
+
+bool Game::checkWinDiagonal(const int& who)
+{
+    for(int i = 0; i < BOARD_SIZE; i++)
+    {
+        for(int j = 0; j < BOARD_SIZE; j++)
+        {
+            if(gameBoard[i][j] == who)
+            {
+                int diagonalCounter = 1;
+                if(j <= 10 && i <=10)
+                {
+                    while(gameBoard[i+diagonalCounter][j+diagonalCounter] == who)
+                    {
+                        diagonalCounter++;
+                        if(diagonalCounter == 5)
+                        {
+                            setGameFinished(true);
+                            return true;
+                        }
+
+                    }
+                }
+                diagonalCounter = 1;
+                if(j >= 5 && i <= 10)
+                {
+                    while(gameBoard[i+diagonalCounter][j-diagonalCounter] == who)
+                    {
+                        diagonalCounter++;
+                        if(diagonalCounter == 5)
+                        {
+                            setGameFinished(true);
+                            return true;
+                        }
+
+                    }
+                }
+                diagonalCounter = 1;
+                if(j <= 10 && i >= 5)
+                {
+                    while(gameBoard[i-diagonalCounter][j+diagonalCounter] == who)
+                    {
+                        diagonalCounter++;
+                        if(diagonalCounter == 5)
+                        {
+                            setGameFinished(true);
+                            return true;
+                        }
+
+                    }
+                }
+                diagonalCounter = 1;
+                if(j >= 5 && i >= 5)
+                {
+                    while(gameBoard[i-diagonalCounter][j-diagonalCounter] == who)
+                    {
+                        diagonalCounter++;
+                        if(diagonalCounter == 5)
+                        {
+                            setGameFinished(true);
+                            return true;
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+    return false;
 }
 
 void Game::setGameFinished(const bool &value)
@@ -81,9 +182,17 @@ void Game::countCPUMove()
         {
             if(checkIfMovePossible(i,j))
             {
-                updateGameBoard(i, j, CPU);
                 QPointF point = countBoardPoint(i,j);
-                emit drawCPUMoveRequest(point.x(), point.y());
+                int value = updateGameBoard(i, j, CPU);
+                if(0 == value)
+                {
+                    emit drawCPUMoveRequest(point.x(), point.y(), false);
+                }
+                else if(CPU == value) // cpu won
+                {
+                    emit drawCPUMoveRequest(point.x(), point.y(), true);
+                    emit winGameFinishRequest(CPU);
+                }
                 return;
             }
         }
@@ -95,8 +204,16 @@ void Game::countUserMove(const int &row, const int &col)
     std::pair<int, int> boardPoint = countGameBoardCoordinates(row, col);
     if(checkIfMovePossible(boardPoint.first, boardPoint.second))
     {
-        updateGameBoard(boardPoint.first, boardPoint.second, USER);
-        emit drawUserMoveRequest(row, col);
+        int value = updateGameBoard(boardPoint.first, boardPoint.second, USER);
+        if(0 == value)
+        {
+            emit drawUserMoveRequest(row, col, false);
+        }
+        else if(USER == value) // user won
+        {
+            emit drawUserMoveRequest(row, col, true);
+            emit winGameFinishRequest(USER);
+        }
     }
 }
 
@@ -113,9 +230,15 @@ void Game::clearGameStatus(const bool &value)
 
 }
 
-void Game::updateGameBoard(const int &x, const int &y, const int &who)
+int Game::updateGameBoard(const int &x, const int &y, const int &who)
 {
     gameBoard[x][y] = who;
+
+    if(checkIfWinConfiguration(who))
+    {
+        return who;
+    }
+    return 0;
 }
 
 

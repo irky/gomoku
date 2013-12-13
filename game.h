@@ -28,15 +28,19 @@ public slots:
     void clearGameStatus(const bool &value);
 
 signals:
-    void drawCPUMoveRequest(const int&, const int&);
-    void drawUserMoveRequest(const int&, const int&);
+    void drawCPUMoveRequest(const int&, const int&, const bool&);
+    void drawUserMoveRequest(const int&, const int&, const bool&);
+    void winGameFinishRequest(const int &whoWon);
 
 private:
-    void updateGameBoard(const int &x, const int &y, const int &who);
+    int updateGameBoard(const int &x, const int &y, const int &who);
     bool checkIfMovePossible(const int &row, const int &col);
     int countSingleCoordinate(const int &row) const;
     QPointF countBoardPoint(const int &row, const int &col) const;
-    bool checkIfWinConfiguration();
+    bool checkIfWinConfiguration(const int &who);
+    bool checkWinHorizontal(const int &who);
+    bool checkWinVertical(const int &who);
+    bool checkWinDiagonal(const int &who);
 
     std::vector< std::vector<int> > gameBoard;
     bool gameFinished;

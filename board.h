@@ -24,8 +24,8 @@ public:
 
 public slots:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
-    void drawCPUMove(const int &row, const int &column);
-    void drawUserMove(const int &row, const int &column);
+    void drawCPUMove(const int &row, const int &column, const bool& hasWon);
+    void drawUserMove(const int &row, const int &column, const bool& hasWon);
     void drawEmptyEllipses(QPainter *);
     void cleanBoardAndGameStatus();
 

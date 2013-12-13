@@ -23,6 +23,9 @@ public:
     explicit Dialog(QWidget *parent = 0);
     ~Dialog();
 
+public slots:
+    void gameFinishedbyWin(const int &whoWon);
+
 signals:
     void clearBoard();
     void letCPUBegin();

@@ -102,15 +102,21 @@ bool Board::isUserMoveAllowed() const
     return userMoveAllowed;
 }
 
-void Board::drawUserMove(const int &row, const int &column)
+void Board::drawUserMove(const int &row, const int &column, const bool &hasWon)
 {
     addEllipse(row-(DIAMETER/2), column-(DIAMETER/2), DIAMETER, DIAMETER, QPen(Qt::blue), QBrush(Qt::blue));
-    setUserMoveAllowed(false);
-    emit CPUMoveRequest();
+    if(!hasWon)
+    {
+        setUserMoveAllowed(false);
+        emit CPUMoveRequest();
+    }
 }
 
-void Board::drawCPUMove(const int &row, const int &column)
+void Board::drawCPUMove(const int &row, const int &column, const bool &hasWon)
 {
     addEllipse(row-(DIAMETER/2), column-(DIAMETER/2) ,DIAMETER, DIAMETER, QPen(Qt::red), QBrush(Qt::red));
-    setUserMoveAllowed(true);
+    if(!hasWon)
+    {
+        setUserMoveAllowed(true);
+    }
 }

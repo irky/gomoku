@@ -15,12 +15,13 @@ Dialog::Dialog(QWidget *parent) :
     resize(530,550);
 
     connect(board, SIGNAL(userMoveRequest(int,int)), game, SLOT(countUserMove(int,int)));
-    connect(game, SIGNAL(drawUserMoveRequest(int,int)), board, SLOT(drawUserMove(int,int)));
+    connect(game, SIGNAL(drawUserMoveRequest(int,int,bool)), board, SLOT(drawUserMove(int,int,bool)));
     connect(board, SIGNAL(CPUMoveRequest()), game, SLOT(countCPUMove()));
-    connect(game, SIGNAL(drawCPUMoveRequest(int,int)), board, SLOT(drawCPUMove(int,int)));
+    connect(game, SIGNAL(drawCPUMoveRequest(int,int,bool)), board, SLOT(drawCPUMove(int,int,bool)));
     connect(board, SIGNAL(stopGame(bool)), game, SLOT(clearGameStatus(bool)));
     connect(this, SIGNAL(clearBoard()), board, SLOT(cleanBoardAndGameStatus()));
     connect(this, SIGNAL(letCPUBegin()), game, SLOT(countCPUMove()));
+    connect(game, SIGNAL(winGameFinishRequest(int)),this,SLOT(gameFinishedbyWin(int)));
 }
 
 Dialog::~Dialog()
@@ -29,6 +30,21 @@ Dialog::~Dialog()
     delete view;
     delete board;
     delete game;
+}
+
+void Dialog::gameFinishedbyWin(const int &whoWon)
+{
+    if(CPU == whoWon)
+    {
+        QMessageBox::information(this, "Game finished", "CPU wins!", "OK");
+    }
+    else if(USER == whoWon)
+    {
+        QMessageBox::information(this, "Game finished", "You win!", "OK");
+    }
+    ui->startGameButton->setEnabled(true);
+    ui->stopButton->setEnabled(false);
+    emit clearBoard();
 }
 
 void Dialog::on_infoButton_clicked()
