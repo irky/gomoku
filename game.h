@@ -53,14 +53,15 @@ private:
     bool lookForCPUFourVertical();
     bool lookForCPUFourDiagonal();
 
-    void lookForOpponentThreat();
-
     bool lookForOpponentFour();
-    bool lookForOpponenFourHorizontal();
-    bool lookForOpponenFourVertical();
-    bool lookForOpponentOneSideFourDiagonal();
+    bool lookForOpponentFourHorizontal();
+    bool lookForOpponentFourVertical();
+    bool lookForOpponentFourDiagonal();
 
     void lookForOpponentTwoSideThree();
+    bool lookForOpponentTwoSideThreeHorizontal();
+    bool lookForOpponentTwoSideThreeVertical();
+    bool lookForOpponentTwoSideThreeDiagonal();
 
     std::pair<int,int> gameBoardPoint;
     void setGameBoardPoint(const int &row, const int &col);
