@@ -22,9 +22,6 @@ public:
     std::pair<int,int> getCPUCoordinates() const;
     std::pair<int,int> countGameBoardCoordinates(const int &row, const int &column) const;
 
-    void makeCPUMove(int i, int j);
-    void makeUserMove(std::pair<int, int> boardPoint, const int &row, const int &col);
-
 public slots:
     void countCPUMove();
     void countUserMove(const int &row, const int &col);
@@ -40,20 +37,29 @@ private:
     bool checkIfMovePossible(const int &row, const int &col);
     int countSingleCoordinate(const int &row) const;
     QPointF countBoardPoint(const int &row, const int &col) const;
+
     bool checkIfWinConfiguration(const int &who);
     bool checkWinHorizontal(const int &who);
     bool checkWinVertical(const int &who);
     bool checkWinDiagonal(const int &who);
 
-    bool lookForCPUFour();
     void makeFirstCPUMove();
+    void makeCPUMove(int i, int j);
+    void makeUserMove(std::pair<int, int> boardPoint, const int &row, const int &col);
 
     void buildThreat();
+    bool lookForCPUFour();
     bool lookForCPUFourHorizontal();
     bool lookForCPUFourVertical();
     bool lookForCPUFourDiagonal();
+
     void lookForOpponentThreat();
-    void lookForOpponentOneSideFour();
+
+    bool lookForOpponentFour();
+    bool lookForOpponenFourHorizontal();
+    bool lookForOpponenFourVertical();
+    bool lookForOpponentOneSideFourDiagonal();
+
     void lookForOpponentTwoSideThree();
 
     std::pair<int,int> gameBoardPoint;

@@ -211,7 +211,15 @@ bool Game::lookForCPUFourHorizontal()
                 fourCounter++;
                 if(fourCounter == 4)
                 {
-                    continue;
+                    if(j >= fourCounter && gameBoard[i][j-fourCounter] == 0)
+                    {
+                        setGameBoardPoint(i,j-fourCounter);
+                        return true;
+                    }
+                    else
+                    {
+                        continue;
+                    }
                 }
             }
             else if(gameBoard[i][j] == 0 && fourCounter == 4)
@@ -240,7 +248,12 @@ bool Game::lookForCPUFourVertical()
             if(gameBoard[j][i] == CPU)
             {
                 fourCounter++;
-                if(fourCounter == 4)
+                if(i >= fourCounter && gameBoard[i-fourCounter][j] == 0)
+                {
+                    setGameBoardPoint(i-fourCounter,j);
+                    return true;
+                }
+                else
                 {
                     continue;
                 }
@@ -349,7 +362,7 @@ bool Game::lookForCPUFour()
 
 void Game::lookForOpponentThreat()
 {
-    lookForOpponentOneSideFour();
+    lookForOpponentFour();
 }
 
 // ----------------------//
@@ -364,8 +377,166 @@ void Game::lookForOpponentThreat()
 // Vertical              //
 // Horizontal            //
 // ----------------------//
-void Game::lookForOpponentOneSideFour()
+bool Game::lookForOpponentFour()
 {
+    if(lookForOpponenFourHorizontal())
+    {
+        qDebug() << "Found opponent one side 4 horizontal";
+        return true;
+    }
+    else if(lookForOpponenFourVertical())
+    {
+        qDebug() << "Found opponent one side 4 vertical";
+        return true;
+    }
+    else if(true)
+    {
+        qDebug() << "Found opponent one side 4 diagonal";
+        return true;
+    }
+    return false;
+}
+
+bool Game::lookForOpponenFourHorizontal()
+{
+    unsigned int fourCounter = 0;
+    for(int i = 0; i < BOARD_SIZE; i++)
+    {
+        for(int j = 0; j < BOARD_SIZE; j++)
+        {
+            if(gameBoard[i][j] == USER)
+            {
+                fourCounter++;
+                if(fourCounter == 4)
+                {
+                    if(j >= fourCounter && gameBoard[i][j-fourCounter] == 0)
+                    {
+                        // tu nalezy postawic blokujacy ruch ,,z tyłu'' czworki i zakonczyc wyszukiwanie
+                        setGameBoardPoint(i,j-fourCounter);
+                        return true;
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+            }
+            else if(gameBoard[i][j] == 0 && fourCounter == 4)
+            {
+                // tu nalezy postawic blokujacy ruch ,,z przodu'' czworki i zakonczyc wyszukiwanie
+                setGameBoardPoint(i,j);
+                return true;
+            }
+            else
+            {
+                fourCounter = 0;
+            }
+        }
+        fourCounter = 0;
+    }
+    return false;
+}
+
+bool Game::lookForOpponenFourVertical()
+{
+    unsigned int fourCounter = 0;
+    for(int i = 0; i < BOARD_SIZE; i++)
+    {
+        for(int j = 0; j < BOARD_SIZE; j++)
+        {
+            if(gameBoard[j][i] == USER)
+            {
+                fourCounter++;
+                if(i >= fourCounter && gameBoard[i-fourCounter][j] == 0)
+                {
+                    setGameBoardPoint(i-fourCounter,j);
+                    return true;
+                }
+                else
+                {
+                    continue;
+                }
+            }
+            else if(gameBoard[j][i] == 0 && fourCounter == 4)
+            {
+                // tu nalezy postawic zwycieski ruch i zakonczyc wyszukiwanie
+                setGameBoardPoint(i,j);
+                return true;
+            }
+            else
+            {
+                fourCounter = 0;
+            }
+        }
+        fourCounter = 0;
+    }
+    return false;
+}
+
+bool Game::lookForOpponentOneSideFourDiagonal()
+{
+    for(int i = 0; i < BOARD_SIZE; i++)
+    {
+        for(int j = 0; j < BOARD_SIZE; j++)
+        {
+            if(gameBoard[j][i] == USER)
+            {
+                unsigned int fourCounter = 1;
+                if(j <= 10 && i <=10)
+                {
+                    while(gameBoard[i+fourCounter][j+fourCounter] == USER)
+                    {
+                        fourCounter++;
+                    }
+                    if(fourCounter == 4 && gameBoard[i+fourCounter][j+fourCounter] == 0)
+                    {
+                        setGameBoardPoint(i+5,j+5);
+                        return true;
+                    }
+                }
+                fourCounter = 1;
+                if(j >= 5 && i <= 10)
+                {
+                    while(gameBoard[i+fourCounter][j-fourCounter] == USER)
+                    {
+                        fourCounter++;
+                    }
+                    if(fourCounter == 4 && gameBoard[i+fourCounter][j-fourCounter] == 0)
+                    {
+                        setGameBoardPoint(i+5,j-5);
+                        return true;
+                    }
+                }
+                fourCounter = 1;
+                if(j <= 10 && i >= 5)
+                {
+                    while(gameBoard[i-fourCounter][j+fourCounter] == USER)
+                    {
+                        fourCounter++;
+                    }
+                    if(fourCounter == 4 && gameBoard[i-fourCounter][j+fourCounter] == 0)
+                    {
+                        setGameBoardPoint(i-5,j+5);
+                        return true;
+                    }
+                }
+                fourCounter = 1;
+                if(j >= 5 && i >= 5)
+                {
+                    while(gameBoard[i-fourCounter][j-fourCounter] == USER)
+                    {
+                        fourCounter++;
+                    }
+                    if(fourCounter == 4 && gameBoard[i-fourCounter][j-fourCounter] == 0)
+                    {
+                        setGameBoardPoint(i-5,j-5);
+                        return true;
+                    }
+                }
+            }
+        }
+    }
+    return false;
 }
 
 void Game::setGameFinished(const bool &value)
