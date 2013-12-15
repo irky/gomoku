@@ -53,32 +53,6 @@ bool Game::checkWinHorizontal(const int& who)
     {
         for(int j = 0; j < BOARD_SIZE; j++)
         {
-            if(gameBoard[j][i] == who)
-            {
-                stoneCounter++;
-                if(stoneCounter == 5)
-                {
-                    setGameFinished(true);
-                    return true;
-                }
-                continue;
-            }
-            else
-            {
-                stoneCounter = 0;
-            }
-        }
-    }
-    return false;
-}
-
-bool Game::checkWinVertical(const int& who)
-{
-    unsigned int stoneCounter = 0;
-    for(int i = 0; i < BOARD_SIZE; i++)
-    {
-        for(int j = 0; j < BOARD_SIZE; j++)
-        {
             if(gameBoard[i][j] == who)
             {
                 stoneCounter++;
@@ -94,6 +68,34 @@ bool Game::checkWinVertical(const int& who)
                 stoneCounter = 0;
             }
         }
+        stoneCounter = 0;
+    }
+    return false;
+}
+
+bool Game::checkWinVertical(const int& who)
+{
+    unsigned int stoneCounter = 0;
+    for(int i = 0; i < BOARD_SIZE; i++)
+    {
+        for(int j = 0; j < BOARD_SIZE; j++)
+        {
+            if(gameBoard[j][i] == who)
+            {
+                stoneCounter++;
+                if(stoneCounter == 5)
+                {
+                    setGameFinished(true);
+                    return true;
+                }
+                continue;
+            }
+            else
+            {
+                stoneCounter = 0;
+            }
+        }
+        stoneCounter = 0;
     }
     return false;
 }
@@ -121,7 +123,7 @@ bool Game::checkWinDiagonal(const int& who)
                     }
                 }
                 diagonalCounter = 1;
-                if(j >= 5 && i <= 10)
+                if(j >= 4 && i <= 10)
                 {
                     while(gameBoard[i+diagonalCounter][j-diagonalCounter] == who)
                     {
@@ -135,7 +137,7 @@ bool Game::checkWinDiagonal(const int& who)
                     }
                 }
                 diagonalCounter = 1;
-                if(j <= 10 && i >= 5)
+                if(j <= 10 && i >= 4)
                 {
                     while(gameBoard[i-diagonalCounter][j+diagonalCounter] == who)
                     {
@@ -149,7 +151,7 @@ bool Game::checkWinDiagonal(const int& who)
                     }
                 }
                 diagonalCounter = 1;
-                if(j >= 5 && i >= 5)
+                if(j >= 4 && i >= 4)
                 {
                     while(gameBoard[i-diagonalCounter][j-diagonalCounter] == who)
                     {
@@ -192,7 +194,7 @@ void Game::buildThreat()
     }
     else
     {
-        if(lookForCPUFour())
+        if(lookForCPUOneSideThree())
         {
             return;
         }
@@ -1112,16 +1114,141 @@ bool Game::lookForCPUOneSideThree()
 
 bool Game::lookForCPUOneSideThreeHorizontal()
 {
+    unsigned int stoneCounter = 0;
+    for(int i = 0; i < BOARD_SIZE; i++)
+    {
+        for(int j = 0; j < BOARD_SIZE; j++)
+        {
+            if(gameBoard[i][j] == CPU)
+            {
+                stoneCounter++;
+                if(stoneCounter == 3)
+                {
+                    if(j <= 12 && gameBoard[i][j+1] == 0 && gameBoard[i][j+2] == 0)
+                    {
+                        setGameBoardPoint(i,j+1);
+                        return true;
+                    }
+                    else if(j >= 4 && gameBoard[i][j-3] == 0 && gameBoard[i][j-4] == 0)
+                    {
+                        setGameBoardPoint(i,j-3);
+                        return true;
+                    }
+                }
+                continue;
+            }
+            else
+            {
+                stoneCounter = 0;
+            }
+        }
+        stoneCounter = 0;
+    }
     return false;
 }
 
 bool Game::lookForCPUOneSideThreeVertical()
 {
+    unsigned int stoneCounter = 0;
+    for(int i = 0; i < BOARD_SIZE; i++)
+    {
+        for(int j = 0; j < BOARD_SIZE; j++)
+        {
+            if(gameBoard[j][i] == CPU)
+            {
+                stoneCounter++;
+                if(stoneCounter == 3)
+                {
+                    if(j <= 12 && gameBoard[j+1][i] == 0 && gameBoard[j+2][i] == 0)
+                    {
+                        setGameBoardPoint(j+1,i);
+                        return true;
+                    }
+                    else if(j >= 4 && gameBoard[j-3][i] == 0 && gameBoard[j-4][i] == 0)
+                    {
+                        setGameBoardPoint(j-3,i);
+                        return true;
+                    }
+                }
+                continue;
+            }
+            else
+            {
+                stoneCounter = 0;
+            }
+        }
+        stoneCounter = 0;
+    }
     return false;
 }
 
 bool Game::lookForCPUOneSideThreeDiagonal()
 {
+    for(int i = 0; i < BOARD_SIZE; i++)
+    {
+        for(int j = 0; j < BOARD_SIZE; j++)
+        {
+            if(gameBoard[i][j] == CPU)
+            {
+                int threeCounter = 1;
+                if(j <= 10 && i <=10)
+                {
+                    while(gameBoard[i+threeCounter][j+threeCounter] == CPU)
+                    {
+                        threeCounter++;
+                        if(threeCounter == 3 && gameBoard[i+3][j+3] == 0 && gameBoard[i+4][j+4] == 0)
+                        {
+                            setGameBoardPoint(i+3,j+3);
+                            return true;
+                        }
+
+                    }
+                }
+                threeCounter = 1;
+                if(j >= 4 && i <= 10)
+                {
+                    while(gameBoard[i+threeCounter][j-threeCounter] == CPU)
+                    {
+                        threeCounter++;
+                        if(threeCounter == 3 && gameBoard[i+3][j-3] == 0 && gameBoard[i+4][j-4] == 0)
+                        {
+                            setGameBoardPoint(i+3,j-3);
+                            return true;
+                        }
+
+                    }
+                }
+                threeCounter = 1;
+                if(j <= 10 && i >= 4)
+                {
+                    while(gameBoard[i-threeCounter][j+threeCounter] == CPU)
+                    {
+                        threeCounter++;
+                        if(threeCounter == 3 && gameBoard[i-3][j+3] == 0 && gameBoard[i-4][j+4] == 0)
+                        {
+                            setGameBoardPoint(i-3,j+3);
+                            return true;
+                        }
+
+                    }
+                }
+                threeCounter = 1;
+                if(j >= 4 && i >= 4)
+                {
+                    while(gameBoard[i-threeCounter][j-threeCounter] == CPU)
+                    {
+                        threeCounter++;
+                        if(threeCounter == 3 && gameBoard[i-3][j-3] == 0 && gameBoard[i-4][j-4] == 0)
+                        {
+                            setGameBoardPoint(i-3,j-3);
+                            return true;
+                        }
+
+                    }
+                }
+            }
+        }
+    }
     return false;
 }
 
@@ -1181,6 +1308,9 @@ void Game::countCPUMove()
     }
 
     // 6. build threat (one side 3-s, 2-s, 1-s)
+    buildThreat();
+    makeCPUMove(gameBoardPoint.first, gameBoardPoint.second);
+    return;
 }
 
 void Game::makeUserMove(std::pair<int, int> boardPoint, const int &row, const int &col)
