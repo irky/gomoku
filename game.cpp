@@ -76,9 +76,9 @@ bool Game::checkWinHorizontal(const int& who)
 bool Game::checkWinVertical(const int& who)
 {
     unsigned int stoneCounter = 0;
-    for(int i = 0; i < BOARD_SIZE; i++)
+    for(unsigned int i = 0; i < BOARD_SIZE; i++)
     {
-        for(int j = 0; j < BOARD_SIZE; j++)
+        for(unsigned int j = 0; j < BOARD_SIZE; j++)
         {
             if(gameBoard[j][i] == who)
             {
@@ -102,13 +102,13 @@ bool Game::checkWinVertical(const int& who)
 
 bool Game::checkWinDiagonal(const int& who)
 {
-    for(int i = 0; i < BOARD_SIZE; i++)
+    for(unsigned int i = 0; i < BOARD_SIZE; i++)
     {
-        for(int j = 0; j < BOARD_SIZE; j++)
+        for(unsigned int j = 0; j < BOARD_SIZE; j++)
         {
             if(gameBoard[i][j] == who)
             {
-                int diagonalCounter = 1;
+                unsigned int diagonalCounter = 1;
                 if(j <= 10 && i <=10)
                 {
                     while(gameBoard[i+diagonalCounter][j+diagonalCounter] == who)
@@ -204,9 +204,9 @@ void Game::buildThreat()
 bool Game::lookForCPUFourHorizontal()
 {
     unsigned int fourCounter = 0;
-    for(int i = 0; i < BOARD_SIZE; i++)
+    for(unsigned int i = 0; i < BOARD_SIZE; i++)
     {
-        for(int j = 0; j < BOARD_SIZE; j++)
+        for(unsigned int j = 0; j < BOARD_SIZE; j++)
         {
             if(gameBoard[i][j] == CPU)
             {
@@ -243,9 +243,9 @@ bool Game::lookForCPUFourHorizontal()
 bool Game::lookForCPUFourVertical()
 {
     unsigned int fourCounter = 0;
-    for(int i = 0; i < BOARD_SIZE; i++)
+    for(unsigned int i = 0; i < BOARD_SIZE; i++)
     {
-        for(int j = 0; j < BOARD_SIZE; j++)
+        for(unsigned int j = 0; j < BOARD_SIZE; j++)
         {
             if(gameBoard[j][i] == CPU)
             {
@@ -282,7 +282,7 @@ bool Game::lookForCPUFourDiagonal()
     {
         for(int j = 0; j < BOARD_SIZE; j++)
         {
-            if(gameBoard[j][i] == CPU)
+            if(gameBoard[i][j] == CPU)
             {
                 unsigned int fourCounter = 1;
                 if(j <= 10 && i <=10)
@@ -385,9 +385,9 @@ bool Game::lookForOpponentFour()
 bool Game::lookForOpponentFourHorizontal()
 {
     unsigned int fourCounter = 0;
-    for(int i = 0; i < BOARD_SIZE; i++)
+    for(unsigned int i = 0; i < BOARD_SIZE; i++)
     {
-        for(int j = 0; j < BOARD_SIZE; j++)
+        for(unsigned int j = 0; j < BOARD_SIZE; j++)
         {
             if(gameBoard[i][j] == USER)
             {
@@ -425,9 +425,9 @@ bool Game::lookForOpponentFourHorizontal()
 bool Game::lookForOpponentFourVertical()
 {
     unsigned int fourCounter = 0;
-    for(int i = 0; i < BOARD_SIZE; i++)
+    for(unsigned int i = 0; i < BOARD_SIZE; i++)
     {
-        for(int j = 0; j < BOARD_SIZE; j++)
+        for(unsigned int j = 0; j < BOARD_SIZE; j++)
         {
             if(gameBoard[j][i] == USER)
             {
@@ -464,7 +464,7 @@ bool Game::lookForOpponentFourDiagonal()
     {
         for(int j = 0; j < BOARD_SIZE; j++)
         {
-            if(gameBoard[j][i] == USER)
+            if(gameBoard[i][j] == USER)
             {
                 unsigned int fourCounter = 1;
                 if(j <= 9 && i <=9)
@@ -517,6 +517,284 @@ bool Game::lookForOpponentFourDiagonal()
                         setGameBoardPoint(i-5,j-5);
                         return true;
                     }
+                }
+            }
+        }
+    }
+    return false;
+}
+
+bool Game::lookForCPUSpecialPattern()
+{
+    if(lookForCPUSpecialPatternHorizontal())
+    {
+        qDebug() << "Found CPU special pattern horizontal";
+        return true;
+    }
+    else if(lookForCPUSpecialPatternVertical())
+    {
+        qDebug() << "Found CPU special pattern vertical";
+        return true;
+    }
+    else if(lookForCPUSpecialPatternDiagonal())
+    {
+        qDebug() << "Found CPU special pattern diagonal";
+        return true;
+    }
+    return false;
+}
+
+bool Game::lookForCPUSpecialPatternHorizontal()
+{
+    for(unsigned int i = 0; i < BOARD_SIZE; i++)
+    {
+        for(unsigned int  j = 0; j < BOARD_SIZE; j++)
+        {
+            if(j <= 10)
+            {
+                if(gameBoard[i][j] == CPU && gameBoard[i][j+1] == CPU &&
+                   gameBoard[i][j+2] == 0 && gameBoard[i][j+3] == CPU && gameBoard[i][j+4] == CPU)
+                {
+                    setGameBoardPoint(i,j+2);
+                    return true;
+                }
+                else if(gameBoard[i][j] == CPU && gameBoard[i][j+1] == 0 &&
+                        gameBoard[i][j+2] == CPU && gameBoard[i][j+3] == CPU && gameBoard[i][j+4] == CPU)
+                {
+                    setGameBoardPoint(i,j+1);
+                    return true;
+                }
+                else if(gameBoard[i][j] == CPU && gameBoard[i][j+1] == CPU &&
+                        gameBoard[i][j+2] == CPU && gameBoard[i][j+3] == 0 && gameBoard[i][j+4] == CPU)
+                {
+                    setGameBoardPoint(i,j+3);
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+bool Game::lookForCPUSpecialPatternVertical()
+{
+    for(unsigned int i = 0; i < BOARD_SIZE; i++)
+    {
+        for(unsigned int  j = 0; j < BOARD_SIZE; j++)
+        {
+            if(j <= 10)
+            {
+                if(gameBoard[j][i] == CPU && gameBoard[j+1][i] == CPU &&
+                   gameBoard[j+2][i] == 0 && gameBoard[j+3][i] == CPU && gameBoard[j+4][i] == CPU)
+                {
+                    setGameBoardPoint(j+2,i);
+                    return true;
+                }
+                else if(gameBoard[j][i] == CPU && gameBoard[j+1][i] == 0 &&
+                        gameBoard[j+2][i] == CPU && gameBoard[j+3][i] == CPU && gameBoard[j+4][i] == CPU)
+                {
+                    setGameBoardPoint(j+1,i);
+                    return true;
+                }
+                else if(gameBoard[j][i] == CPU && gameBoard[j+1][i] == CPU &&
+                        gameBoard[j+2][i] == CPU && gameBoard[j+3][i] == 0 && gameBoard[j+4][i] == CPU)
+                {
+                    setGameBoardPoint(j+3,i);
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+bool Game::lookForCPUSpecialPatternDiagonal()
+{
+    for(unsigned int i = 0; i < BOARD_SIZE; i++)
+    {
+        for(unsigned int  j = 0; j < BOARD_SIZE; j++)
+        {
+            // lewy gorny, prawy dolny rog
+            if(j >= 4 && i <= 10)
+            {
+                if(gameBoard[i][j] == CPU && gameBoard[i+1][j+1] == CPU &&
+                   gameBoard[i+2][j+2] == 0 && gameBoard[i+3][j+3] == CPU && gameBoard[i+4][j+4] == CPU)
+                {
+                    setGameBoardPoint(i+2,j+2);
+                    return true;
+                }
+                else if(gameBoard[i][j] == CPU && gameBoard[i+1][j+1] == 0 &&
+                        gameBoard[i+2][j+2] == CPU && gameBoard[i+3][j+3] == CPU && gameBoard[i+4][j+4] == CPU)
+                {
+                    setGameBoardPoint(i+1,j+1);
+                    return true;
+                }
+                else if(gameBoard[i][j] == CPU && gameBoard[i+1][j+1] == CPU &&
+                        gameBoard[i+2][j+2] == CPU && gameBoard[i+3][j+3] == 0 && gameBoard[i+4][j+4] == CPU)
+                {
+                    setGameBoardPoint(i+3,j+3);
+                    return true;
+                }
+            }
+            // lewy dolny, prawy gorny rog
+            if(j >= 10 && i >= 4)
+            {
+                if(gameBoard[i][j] == CPU && gameBoard[i-1][j+1] == CPU &&
+                   gameBoard[i-2][j+2] == 0 && gameBoard[i-3][j+3] == CPU && gameBoard[i-4][j+4] == CPU)
+                {
+                    setGameBoardPoint(i+2,j+2);
+                    return true;
+                }
+                else if(gameBoard[i][j] == CPU && gameBoard[i-1][j+1] == 0 &&
+                        gameBoard[i-2][j+2] == CPU && gameBoard[i-3][j+3] == CPU && gameBoard[i-4][j+4] == CPU)
+                {
+                    setGameBoardPoint(i-1,j+1);
+                    return true;
+                }
+                else if(gameBoard[i][j] == CPU && gameBoard[i-1][j+1] == CPU &&
+                        gameBoard[i-2][j+2] == CPU && gameBoard[i-3][j+3] == 0 && gameBoard[i-4][j+4] == CPU)
+                {
+                    setGameBoardPoint(i-3,j+3);
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+bool Game::lookForOpponentSpecialPattern()
+{
+    if(lookForCPUSpecialPatternHorizontal())
+    {
+        qDebug() << "Found opponent special pattern horizontal";
+        return true;
+    }
+    else if(lookForCPUSpecialPatternVertical())
+    {
+        qDebug() << "Found opponent special pattern vertical";
+        return true;
+    }
+    else if(lookForCPUSpecialPatternDiagonal())
+    {
+        qDebug() << "Found opponent special pattern diagonal";
+        return true;
+    }
+    return false;
+}
+
+bool Game::lookForOpponentSpecialPatternHorizontal()
+{
+    for(unsigned int i = 0; i < BOARD_SIZE; i++)
+    {
+        for(unsigned int  j = 0; j < BOARD_SIZE; j++)
+        {
+            if(j <= 10)
+            {
+                if(gameBoard[i][j] == USER && gameBoard[i][j+1] == USER &&
+                   gameBoard[i][j+2] == 0 && gameBoard[i][j+3] == USER && gameBoard[i][j+4] == USER)
+                {
+                    setGameBoardPoint(i,j+2);
+                    return true;
+                }
+                else if(gameBoard[i][j] == USER && gameBoard[i][j+1] == 0 &&
+                        gameBoard[i][j+2] == USER && gameBoard[i][j+3] == USER && gameBoard[i][j+4] == USER)
+                {
+                    setGameBoardPoint(i,j+1);
+                    return true;
+                }
+                else if(gameBoard[i][j] == USER && gameBoard[i][j+1] == USER &&
+                        gameBoard[i][j+2] == USER && gameBoard[i][j+3] == 0 && gameBoard[i][j+4] == USER)
+                {
+                    setGameBoardPoint(i,j+3);
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+bool Game::lookForOpponentSpecialPatternVertical()
+{
+    for(unsigned int i = 0; i < BOARD_SIZE; i++)
+    {
+        for(unsigned int  j = 0; j < BOARD_SIZE; j++)
+        {
+            if(j <= 10)
+            {
+                if(gameBoard[j][i] == USER && gameBoard[j+1][i] == USER &&
+                   gameBoard[j+2][i] == 0 && gameBoard[j+3][i] == USER && gameBoard[j+4][i] == USER)
+                {
+                    setGameBoardPoint(j+2,i);
+                    return true;
+                }
+                else if(gameBoard[j][i] == USER && gameBoard[j+1][i] == 0 &&
+                        gameBoard[j+2][i] == USER && gameBoard[j+3][i] == USER && gameBoard[j+4][i] == USER)
+                {
+                    setGameBoardPoint(j+1,i);
+                    return true;
+                }
+                else if(gameBoard[j][i] == USER && gameBoard[j+1][i] == USER &&
+                        gameBoard[j+2][i] == USER && gameBoard[j+3][i] == 0 && gameBoard[j+4][i] == USER)
+                {
+                    setGameBoardPoint(j+3,i);
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+bool Game::lookForOpponentSpecialPatternDiagonal()
+{
+    for(unsigned int i = 0; i < BOARD_SIZE; i++)
+    {
+        for(unsigned int  j = 0; j < BOARD_SIZE; j++)
+        {
+            // lewy gorny, prawy dolny rog
+            if(j >= 4 && i <= 10)
+            {
+                if(gameBoard[i][j] == USER && gameBoard[i+1][j+1] == USER &&
+                   gameBoard[i+2][j+2] == 0 && gameBoard[i+3][j+3] == USER && gameBoard[i+4][j+4] == USER)
+                {
+                    setGameBoardPoint(i+2,j+2);
+                    return true;
+                }
+                else if(gameBoard[i][j] == USER && gameBoard[i+1][j+1] == 0 &&
+                        gameBoard[i+2][j+2] == USER && gameBoard[i+3][j+3] == USER && gameBoard[i+4][j+4] == USER)
+                {
+                    setGameBoardPoint(i+1,j+1);
+                    return true;
+                }
+                else if(gameBoard[i][j] == USER && gameBoard[i+1][j+1] == USER &&
+                        gameBoard[i+2][j+2] == USER && gameBoard[i+3][j+3] == 0 && gameBoard[i+4][j+4] == USER)
+                {
+                    setGameBoardPoint(i+3,j+3);
+                    return true;
+                }
+            }
+            // lewy dolny, prawy gorny rog
+            if(j >= 10 && i >= 4)
+            {
+                if(gameBoard[i][j] == USER && gameBoard[i-1][j+1] == USER &&
+                   gameBoard[i-2][j+2] == 0 && gameBoard[i-3][j+3] == USER && gameBoard[i-4][j+4] == USER)
+                {
+                    setGameBoardPoint(i+2,j+2);
+                    return true;
+                }
+                else if(gameBoard[i][j] == USER && gameBoard[i-1][j+1] == 0 &&
+                        gameBoard[i-2][j+2] == USER && gameBoard[i-3][j+3] == USER && gameBoard[i-4][j+4] == USER)
+                {
+                    setGameBoardPoint(i-1,j+1);
+                    return true;
+                }
+                else if(gameBoard[i][j] == USER && gameBoard[i-1][j+1] == USER &&
+                        gameBoard[i-2][j+2] == USER && gameBoard[i-3][j+3] == 0 && gameBoard[i-4][j+4] == USER)
+                {
+                    setGameBoardPoint(i-3,j+3);
+                    return true;
                 }
             }
         }
@@ -1283,9 +1561,18 @@ void Game::countCPUMove()
         return;
     }
     // 2. look for CPU special patterns OOO-O & 00-00 & 0-000
+    if(lookForCPUSpecialPattern())
+    {
+        makeCPUMove(gameBoardPoint.first, gameBoardPoint.second);
+        return;
+    }
 
     // 3. look for Opponent special patterns OOO-O & 00-00 & 0-000
-
+    if(lookForOpponentSpecialPattern())
+    {
+        makeCPUMove(gameBoardPoint.first, gameBoardPoint.second);
+        return;
+    }
     // 4. look for Opponent 4-s
     if(lookForOpponentFour())
     {

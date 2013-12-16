@@ -58,6 +58,16 @@ private:
     bool lookForOpponentFourVertical();
     bool lookForOpponentFourDiagonal();
 
+    bool lookForCPUSpecialPattern();
+    bool lookForCPUSpecialPatternHorizontal();
+    bool lookForCPUSpecialPatternVertical();
+    bool lookForCPUSpecialPatternDiagonal();
+
+    bool lookForOpponentSpecialPattern();
+    bool lookForOpponentSpecialPatternHorizontal();
+    bool lookForOpponentSpecialPatternVertical();
+    bool lookForOpponentSpecialPatternDiagonal();
+
     bool lookForOpponentTwoSideThree();
     bool lookForOpponentTwoSideThreeHorizontal();
     bool lookForOpponentTwoSideThreeVertical();
@@ -73,13 +83,16 @@ private:
     bool lookForCPUOneSideThreeVertical();
     bool lookForCPUOneSideThreeDiagonal();
 
-    std::pair<int,int> gameBoardPoint;
-    void setGameBoardPoint(const int &row, const int &col);
-    std::vector< std::vector<int> > gameBoard;
     bool gameFinished;
     void setGameFinished(const bool &value);
 
     bool firstCPUMove;
+
+    std::pair<int,int> gameBoardPoint;
+    void setGameBoardPoint(const int &row, const int &col);
+
+    std::vector< std::vector<int> > gameBoard;
+
 };
 
 #endif // GAME_H
