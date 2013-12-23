@@ -83,6 +83,16 @@ private:
     bool lookForCPUOneSideThreeVertical();
     bool lookForCPUOneSideThreeDiagonal();
 
+    bool lookForCPUTwoSideTwo();
+    bool lookForCPUTwoSideTwoHorizontal();
+    bool lookForCPUTwoSideTwoVertical();
+    bool lookForCPUTwoSideTwoDiagonal();
+
+    bool lookForCPUSingle();
+    bool lookForCPUSingleHorizontal();
+    bool lookForCPUSingleVertical();
+    bool lookForCPUSingleDiagonal();
+
     bool gameFinished;
     void setGameFinished(const bool &value);
 
