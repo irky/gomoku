@@ -68,25 +68,20 @@ private:
     bool lookForOpponentSpecialPatternVertical();
     bool lookForOpponentSpecialPatternDiagonal();
 
-    bool lookForOpponentTwoSideThree();
-    bool lookForOpponentTwoSideThreeHorizontal();
-    bool lookForOpponentTwoSideThreeVertical();
-    bool lookForOpponentTwoSideThreeDiagonal();
+    bool lookForOpponentThree();
+    bool lookForOpponentThreeHorizontal();
+    bool lookForOpponentThreeVertical();
+    bool lookForOpponentThreeDiagonal();
 
-    bool lookForCPUTwoSideThree();
-    bool lookForCPUTwoSideThreeHorizontal();
-    bool lookForCPUTwoSideThreeVertical();
-    bool lookForCPUTwoSideThreeDiagonal();
+    bool lookForCPUThree();
+    bool lookForCPUThreeHorizontal();
+    bool lookForCPUThreeVertical();
+    bool lookForCPUThreeDiagonal();
 
-    bool lookForCPUOneSideThree();
-    bool lookForCPUOneSideThreeHorizontal();
-    bool lookForCPUOneSideThreeVertical();
-    bool lookForCPUOneSideThreeDiagonal();
-
-    bool lookForCPUTwoSideTwo();
-    bool lookForCPUTwoSideTwoHorizontal();
-    bool lookForCPUTwoSideTwoVertical();
-    bool lookForCPUTwoSideTwoDiagonal();
+    bool lookForCPUTwo();
+    bool lookForCPUTwoHorizontal();
+    bool lookForCPUTwoVertical();
+    bool lookForCPUTwoDiagonal();
 
     bool lookForCPUSingle();
     bool lookForCPUSingleHorizontal();
