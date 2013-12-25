@@ -738,17 +738,62 @@ bool Game::lookForOpponentSpecialPatternDiagonal()
 
 bool Game::lookForOpponentThree()
 {
-    if(lookForOpponentThreeHorizontal())
+    if(lookForOpponentThreeHorizontal1Priority())
     {
         qDebug() << "Found opponent 3 horizontal";
         return true;
     }
-    else if(lookForOpponentThreeVertical())
+    else if(lookForOpponentThreeVertical1Priority())
     {
         qDebug() << "Found opponent 3 vertical";
         return true;
     }
-    else if(lookForOpponentThreeDiagonal())
+    else if(lookForOpponentThreeDiagonal1Priority())
+    {
+        qDebug() << "Found opponent 3 diagonal";
+        return true;
+    }
+    else if(lookForOpponentThreeHorizontal2Priority())
+    {
+        qDebug() << "Found opponent 3 horizontal";
+        return true;
+    }
+    else if(lookForOpponentThreeVertical2Priority())
+    {
+        qDebug() << "Found opponent 3 vertical";
+        return true;
+    }
+    else if(lookForOpponentThreeDiagonal2Priority())
+    {
+        qDebug() << "Found opponent 3 diagonal";
+        return true;
+    }
+    else if(lookForOpponentThreeHorizontal3Priority())
+    {
+        qDebug() << "Found opponent 3 horizontal";
+        return true;
+    }
+    else if(lookForOpponentThreeVertical3Priority())
+    {
+        qDebug() << "Found opponent 3 vertical";
+        return true;
+    }
+    else if(lookForOpponentThreeDiagonal3Priority())
+    {
+        qDebug() << "Found opponent 3 diagonal";
+        return true;
+    }
+    else if(lookForOpponentThreeHorizontal4Priority())
+    {
+        qDebug() << "Found opponent 3 horizontal";
+        return true;
+    }
+    else if(lookForOpponentThreeVertical4Priority())
+    {
+        qDebug() << "Found opponent 3 vertical";
+        return true;
+    }
+    else if(lookForOpponentThreeDiagonal4Priority())
     {
         qDebug() << "Found opponent 3 diagonal";
         return true;
@@ -756,7 +801,7 @@ bool Game::lookForOpponentThree()
     return false;
 }
 
-bool Game::lookForOpponentThreeHorizontal()
+bool Game::lookForOpponentThreeHorizontal1Priority()
 {
     for(int i = 0; i < BOARD_SIZE; i++)
     {
@@ -773,6 +818,72 @@ bool Game::lookForOpponentThreeHorizontal()
                     return true;
                 }
             }
+        }
+    }
+    return false;
+}
+
+bool Game::lookForOpponentThreeVertical1Priority()
+{
+    for(int i = 0; i < BOARD_SIZE; i++)
+    {
+        for(int j = 0; j < BOARD_SIZE; j++)
+        {
+            if(j <= 8)
+            {
+                // --OOO--
+                if(gameBoard[j][i] == 0 && gameBoard[j+1][i] == 0 &&
+                   gameBoard[j+2][i] == USER && gameBoard[j+3][i] == USER &&
+                   gameBoard[j+4][i] == USER && gameBoard[j+5][i] == 0 && gameBoard[j+6][i] == 0)
+                {
+                    setGameBoardPoint(j+1,i);
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+bool Game::lookForOpponentThreeDiagonal1Priority()
+{
+    for(int i = 0; i < BOARD_SIZE; i++)
+    {
+        for(int j = 0; j < BOARD_SIZE; j++)
+        {
+            if(j <= 8 && i <= 8)
+            {
+                // --OOO--
+                if(gameBoard[i][j] == 0 && gameBoard[i+1][j+1] == 0 &&
+                   gameBoard[i+2][j+2] == USER && gameBoard[i+3][j+3] == USER &&
+                   gameBoard[i+4][j+4] == USER && gameBoard[i+5][j+5] == 0 && gameBoard[i+6][j+6] == 0)
+                {
+                    setGameBoardPoint(i+5,j+5);
+                    return true;
+                }
+            }
+            if(j <=8 && i >= 6)
+            {
+                // --OOO--
+                if(gameBoard[i][j] == 0 && gameBoard[i-1][j+1] == 0 &&
+                   gameBoard[i-2][j+2] == USER && gameBoard[i-3][j+3] == USER &&
+                   gameBoard[i-4][j+4] == USER && gameBoard[i-5][j+5] == 0 && gameBoard[i-6][j+6] == 0)
+                {
+                    setGameBoardPoint(i-5,j+5);
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+bool Game::lookForOpponentThreeHorizontal2Priority()
+{
+    for(int i = 0; i < BOARD_SIZE; i++)
+    {
+        for(int j = 0; j < BOARD_SIZE; j++)
+        {
             if(j <= 9)
             {
                 // --000-
@@ -808,6 +919,144 @@ bool Game::lookForOpponentThreeHorizontal()
                     return true;
                 }
             }
+        }
+    }
+    return false;
+}
+
+bool Game::lookForOpponentThreeVertical2Priority()
+{
+    for(int i = 0; i < BOARD_SIZE; i++)
+    {
+        for(int j = 0; j < BOARD_SIZE; j++)
+        {
+            if(j <= 9)
+            {
+                // --000-
+                if(gameBoard[j][i] == 0 && gameBoard[j+1][i] == 0 &&
+                   gameBoard[j+2][i] == USER && gameBoard[j+3][i] == USER &&
+                   gameBoard[j+4][i] == USER && gameBoard[j+5][i] == 0)
+                {
+                    setGameBoardPoint(j+1,i);
+                    return true;
+                }
+                // -000--
+                else if(gameBoard[j][i] == 0 && gameBoard[j+1][i] == USER &&
+                        gameBoard[j+2][i] == USER && gameBoard[j+3][i] == USER &&
+                        gameBoard[j+4][i] == 0 && gameBoard[j+5][i] == 0)
+                {
+                    setGameBoardPoint(j+4,i);
+                    return true;
+                }
+                // -00-0-
+                else if(gameBoard[j][i] == 0 && gameBoard[j+1][i] == USER &&
+                        gameBoard[j+2][i] == USER && gameBoard[j+3][i] == 0 &&
+                        gameBoard[j+4][i] == USER && gameBoard[j+5][i] == 0)
+                {
+                    setGameBoardPoint(j+3,i);
+                    return true;
+                }
+                // -0-00-
+                else if(gameBoard[j][i] == 0 && gameBoard[j+1][i] == USER &&
+                        gameBoard[j+2][i] == 0 && gameBoard[j+3][i] == USER &&
+                        gameBoard[j+4][i] == USER && gameBoard[j+5][i] == 0)
+                {
+                    setGameBoardPoint(j+2,i);
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+bool Game::lookForOpponentThreeDiagonal2Priority()
+{
+    for(int i = 0; i < BOARD_SIZE; i++)
+    {
+        for(int j = 0; j < BOARD_SIZE; j++)
+        {
+            if(j <= 9 && i <= 9)
+            {
+                // --000-
+                if(gameBoard[i][j] == 0 && gameBoard[i+1][j+1] == 0 &&
+                   gameBoard[i+2][j+2] == USER && gameBoard[i+3][j+3] == USER &&
+                   gameBoard[i+4][j+4] == USER && gameBoard[i+5][j+5] == 0)
+                {
+                    setGameBoardPoint(i+1,j+1);
+                    return true;
+                }
+                // -000--
+                else if(gameBoard[i][j] == 0 && gameBoard[i+1][j+1] == USER &&
+                        gameBoard[i+2][j+2] == USER && gameBoard[i+3][j+3] == USER &&
+                        gameBoard[i+4][j+4] == 0 && gameBoard[i+5][j+5] == 0)
+                {
+                    setGameBoardPoint(i+4,j+4);
+                    return true;
+                }
+                // -00-0-
+                else if(gameBoard[i][j] == 0 && gameBoard[i+1][j+1] == USER &&
+                        gameBoard[i+2][j+2] == USER && gameBoard[i+3][j+3] == 0 &&
+                        gameBoard[i+4][j+4] == USER && gameBoard[i+5][j+5] == 0)
+                {
+                    setGameBoardPoint(i+3,j+3);
+                    return true;
+                }
+                // -0-00-
+                else if(gameBoard[i][j] == 0 && gameBoard[i+1][j+1] == USER &&
+                        gameBoard[i+2][j+2] == 0 && gameBoard[i+3][j+3] == USER &&
+                        gameBoard[i+4][j+4] == USER && gameBoard[i+5][j+5] == 0)
+                {
+                    setGameBoardPoint(i+2,j+2);
+                    return true;
+                }
+            }
+            if(j <= 9 && i >= 5)
+            {
+                // --000-
+                if(gameBoard[i][j] == 0 && gameBoard[i-1][j+1] == 0 &&
+                   gameBoard[i-2][j+2] == USER && gameBoard[i-3][j+3] == USER &&
+                   gameBoard[i-4][j+4] == USER && gameBoard[i-5][j+5] == 0)
+                {
+                    setGameBoardPoint(i-1,j+1);
+                    return true;
+                }
+                // -000--
+                else if(gameBoard[i][j] == 0 && gameBoard[i-1][j+1] == USER &&
+                        gameBoard[i-2][j+2] == USER && gameBoard[i-3][j+3] == USER &&
+                        gameBoard[i-4][j+4] == 0 && gameBoard[i-5][j+5] == 0)
+                {
+                    setGameBoardPoint(i-4,j+4);
+                    return true;
+                }
+                // -00-0-
+                else if(gameBoard[i][j] == 0 && gameBoard[i-1][j+1] == USER &&
+                        gameBoard[i-2][j+2] == USER && gameBoard[i-3][j+3] == 0 &&
+                        gameBoard[i-4][j+4] == USER && gameBoard[i-5][j+5] == 0)
+                {
+                    setGameBoardPoint(i-3,j+3);
+                    return true;
+                }
+                // -0-00-
+                else if(gameBoard[i][j] == 0 && gameBoard[i-1][j+1] == USER &&
+                        gameBoard[i-2][j+2] == 0 && gameBoard[i-3][j+3] == USER &&
+                        gameBoard[i-4][j+4] == USER && gameBoard[i-5][j+5] == 0)
+                {
+                    setGameBoardPoint(i-2,j+2);
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+bool Game::lookForOpponentThreeHorizontal3Priority()
+{
+    for(int i = 0; i < BOARD_SIZE; i++)
+    {
+        for(int j = 0; j < BOARD_SIZE; j++)
+        {
             if(j <= 8)
             {
                 if(gameBoard[i][j] == 0 && gameBoard[i][j+1] == USER &&
@@ -832,6 +1081,111 @@ bool Game::lookForOpponentThreeHorizontal()
                     return true;
                 }
             }
+        }
+    }
+    return false;
+}
+
+bool Game::lookForOpponentThreeVertical3Priority()
+{
+    for(int i = 0; i < BOARD_SIZE; i++)
+    {
+        for(int j = 0; j < BOARD_SIZE; j++)
+        {
+            if(j <= 8)
+            {
+                if(gameBoard[j][i] == 0 && gameBoard[j+1][i] == USER &&
+                   gameBoard[j+2][i] == 0 && gameBoard[j+3][i] == USER &&
+                   gameBoard[j+4][i] == 0 && gameBoard[j+5][i] == USER && gameBoard[j+6][i] == 0)
+                {
+                    setGameBoardPoint(j+2,i);
+                    return true;
+                }
+                else if(gameBoard[j][i] == 0 && gameBoard[j+1][i] == USER &&
+                        gameBoard[j+2][i] == USER && gameBoard[j+3][i] == 0 &&
+                        gameBoard[j+4][i] == 0 && gameBoard[j+5][i] == USER && gameBoard[j+6][i] == 0)
+                {
+                    setGameBoardPoint(j+4,i);
+                    return true;
+                }
+                else if(gameBoard[j][i] == 0 && gameBoard[j+1][i] == USER &&
+                        gameBoard[j+2][i] == 0 && gameBoard[j+3][i] == 0 &&
+                        gameBoard[j+4][i] == USER && gameBoard[j+5][i] == USER && gameBoard[j+6][i] == 0)
+                {
+                    setGameBoardPoint(j+2,i);
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+bool Game::lookForOpponentThreeDiagonal3Priority()
+{
+    for(int i = 0; i < BOARD_SIZE; i++)
+    {
+        for(int j = 0; j < BOARD_SIZE; j++)
+        {
+            if(j <= 8 && i <= 8)
+            {
+                if(gameBoard[i][j] == 0 && gameBoard[i+1][j+1] == USER &&
+                   gameBoard[i+2][j+2] == 0 && gameBoard[i+3][j+3] == USER &&
+                   gameBoard[i+4][j+4] == 0 && gameBoard[i+5][j+5] == USER && gameBoard[i+6][j+6] == 0)
+                {
+                    setGameBoardPoint(i+2,j+2);
+                    return true;
+                }
+                else if(gameBoard[i][j] == 0 && gameBoard[i+1][j+1] == USER &&
+                        gameBoard[i+2][j+2] == USER && gameBoard[i+3][j+3] == 0 &&
+                        gameBoard[i+4][j+4] == 0 && gameBoard[i+5][j+5] == USER && gameBoard[i+6][j+6] == 0)
+                {
+                    setGameBoardPoint(i+4,j+4);
+                    return true;
+                }
+                else if(gameBoard[i][j] == 0 && gameBoard[i+1][j+1] == USER &&
+                        gameBoard[i+2][j+2] == 0 && gameBoard[i+3][j+3] == 0 &&
+                        gameBoard[i+2][j+4] == USER && gameBoard[i+5][j+5] == USER && gameBoard[i+6][j+6] == 0)
+                {
+                    setGameBoardPoint(i+2,j+2);
+                    return true;
+                }
+            }
+            if(j <=8 && i >= 6)
+            {
+                if(gameBoard[i][j] == 0 && gameBoard[i-1][j+1] == USER &&
+                   gameBoard[i-2][j+2] == 0 && gameBoard[i-3][j+3] == USER &&
+                   gameBoard[i-4][j+4] == 0 && gameBoard[i-5][j+5] == USER && gameBoard[i-6][j+6] == 0)
+                {
+                    setGameBoardPoint(i-2,j+2);
+                    return true;
+                }
+                else if(gameBoard[i][j] == 0 && gameBoard[i-1][j+1] == USER &&
+                        gameBoard[i-2][j+2] == USER && gameBoard[i-3][j+3] == 0 &&
+                        gameBoard[i-4][j+4] == 0 && gameBoard[i-5][j+5] == USER && gameBoard[i-6][j+6] == 0)
+                {
+                    setGameBoardPoint(i-4,j+4);
+                    return true;
+                }
+                else if(gameBoard[i][j] == 0 && gameBoard[i-1][j+1] == USER &&
+                        gameBoard[i-2][j+2] == 0 && gameBoard[i-3][j+3] == 0 &&
+                        gameBoard[i-2][j+4] == USER && gameBoard[i-5][j+5] == USER && gameBoard[i-6][j+6] == 0)
+                {
+                    setGameBoardPoint(i-2,j+2);
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+bool Game::lookForOpponentThreeHorizontal4Priority()
+{
+    for(int i = 0; i < BOARD_SIZE; i++)
+    {
+        for(int j = 0; j < BOARD_SIZE; j++)
+        {
             if(j <= 10)
             {
                 // -000-
@@ -904,82 +1258,12 @@ bool Game::lookForOpponentThreeHorizontal()
     return false;
 }
 
-bool Game::lookForOpponentThreeVertical()
+bool Game::lookForOpponentThreeVertical4Priority()
 {
     for(int i = 0; i < BOARD_SIZE; i++)
     {
         for(int j = 0; j < BOARD_SIZE; j++)
         {
-            if(j <= 8)
-            {
-                // --OOO--
-                if(gameBoard[j][i] == 0 && gameBoard[j+1][i] == 0 &&
-                   gameBoard[j+2][i] == USER && gameBoard[j+3][i] == USER &&
-                   gameBoard[j+4][i] == USER && gameBoard[j+5][i] == 0 && gameBoard[j+6][i] == 0)
-                {
-                    setGameBoardPoint(j+1,i);
-                    return true;
-                }
-            }
-            if(j <= 9)
-            {
-                // --000-
-                if(gameBoard[j][i] == 0 && gameBoard[j+1][i] == 0 &&
-                   gameBoard[j+2][i] == USER && gameBoard[j+3][i] == USER &&
-                   gameBoard[j+4][i] == USER && gameBoard[j+5][i] == 0)
-                {
-                    setGameBoardPoint(j+1,i);
-                    return true;
-                }
-                // -000--
-                else if(gameBoard[j][i] == 0 && gameBoard[j+1][i] == USER &&
-                        gameBoard[j+2][i] == USER && gameBoard[j+3][i] == USER &&
-                        gameBoard[j+4][i] == 0 && gameBoard[j+5][i] == 0)
-                {
-                    setGameBoardPoint(j+4,i);
-                    return true;
-                }
-                // -00-0-
-                else if(gameBoard[j][i] == 0 && gameBoard[j+1][i] == USER &&
-                        gameBoard[j+2][i] == USER && gameBoard[j+3][i] == 0 &&
-                        gameBoard[j+4][i] == USER && gameBoard[j+5][i] == 0)
-                {
-                    setGameBoardPoint(j+3,i);
-                    return true;
-                }
-                // -0-00-
-                else if(gameBoard[j][i] == 0 && gameBoard[j+1][i] == USER &&
-                        gameBoard[j+2][i] == 0 && gameBoard[j+3][i] == USER &&
-                        gameBoard[j+4][i] == USER && gameBoard[j+5][i] == 0)
-                {
-                    setGameBoardPoint(j+2,i);
-                    return true;
-                }
-            }
-            if(j <= 8)
-            {
-                if(gameBoard[j][i] == 0 && gameBoard[j+1][i] == USER &&
-                   gameBoard[j+2][i] == 0 && gameBoard[j+3][i] == USER &&
-                   gameBoard[j+4][i] == 0 && gameBoard[j+5][i] == USER && gameBoard[j+6][i] == 0)
-                {
-                    setGameBoardPoint(j+2,i);
-                    return true;
-                }
-                else if(gameBoard[j][i] == 0 && gameBoard[j+1][i] == USER &&
-                        gameBoard[j+2][i] == USER && gameBoard[j+3][i] == 0 &&
-                        gameBoard[j+4][i] == 0 && gameBoard[j+5][i] == USER && gameBoard[j+6][i] == 0)
-                {
-                    setGameBoardPoint(j+4,i);
-                    return true;
-                }
-                else if(gameBoard[j][i] == 0 && gameBoard[j+1][i] == USER &&
-                        gameBoard[j+2][i] == 0 && gameBoard[j+3][i] == 0 &&
-                        gameBoard[j+4][i] == USER && gameBoard[j+5][i] == USER && gameBoard[j+6][i] == 0)
-                {
-                    setGameBoardPoint(j+2,i);
-                    return true;
-                }
-            }
             if(j <= 10)
             {
                 // -000-
@@ -1052,152 +1336,12 @@ bool Game::lookForOpponentThreeVertical()
     return false;
 }
 
-bool Game::lookForOpponentThreeDiagonal()
+bool Game::lookForOpponentThreeDiagonal4Priority()
 {
     for(int i = 0; i < BOARD_SIZE; i++)
     {
         for(int j = 0; j < BOARD_SIZE; j++)
         {
-            if(j <= 8 && i <= 8)
-            {
-                // --OOO--
-                if(gameBoard[i][j] == 0 && gameBoard[i+1][j+1] == 0 &&
-                   gameBoard[i+2][j+2] == USER && gameBoard[i+3][j+3] == USER &&
-                   gameBoard[i+4][j+4] == USER && gameBoard[i+5][j+5] == 0 && gameBoard[i+6][j+6] == 0)
-                {
-                    setGameBoardPoint(i+5,j+5);
-                    return true;
-                }
-            }
-            if(j <=8 && i >= 6)
-            {
-                // --OOO--
-                if(gameBoard[i][j] == 0 && gameBoard[i-1][j+1] == 0 &&
-                   gameBoard[i-2][j+2] == USER && gameBoard[i-3][j+3] == USER &&
-                   gameBoard[i-4][j+4] == USER && gameBoard[i-5][j+5] == 0 && gameBoard[i-6][j+6] == 0)
-                {
-                    setGameBoardPoint(i-5,j+5);
-                    return true;
-                }
-            }
-            if(j <= 9 && i <= 9)
-            {
-                // --000-
-                if(gameBoard[i][j] == 0 && gameBoard[i+1][j+1] == 0 &&
-                   gameBoard[i+2][j+2] == USER && gameBoard[i+3][j+3] == USER &&
-                   gameBoard[i+4][j+4] == USER && gameBoard[i+5][j+5] == 0)
-                {
-                    setGameBoardPoint(i+1,j+1);
-                    return true;
-                }
-                // -000--
-                else if(gameBoard[i][j] == 0 && gameBoard[i+1][j+1] == USER &&
-                        gameBoard[i+2][j+2] == USER && gameBoard[i+3][j+3] == USER &&
-                        gameBoard[i+4][j+4] == 0 && gameBoard[i+5][j+5] == 0)
-                {
-                    setGameBoardPoint(i+4,j+4);
-                    return true;
-                }
-                // -00-0-
-                else if(gameBoard[i][j] == 0 && gameBoard[i+1][j+1] == USER &&
-                        gameBoard[i+2][j+2] == USER && gameBoard[i+3][j+3] == 0 &&
-                        gameBoard[i+4][j+4] == USER && gameBoard[i+5][j+5] == 0)
-                {
-                    setGameBoardPoint(i+3,j+3);
-                    return true;
-                }
-                // -0-00-
-                else if(gameBoard[i][j] == 0 && gameBoard[i+1][j+1] == USER &&
-                        gameBoard[i+2][j+2] == 0 && gameBoard[i+3][j+3] == USER &&
-                        gameBoard[i+4][j+4] == USER && gameBoard[i+5][j+5] == 0)
-                {
-                    setGameBoardPoint(i+2,j+2);
-                    return true;
-                }
-            }
-            if(j <= 9 && i >= 5)
-            {
-                // --000-
-                if(gameBoard[i][j] == 0 && gameBoard[i-1][j+1] == 0 &&
-                   gameBoard[i-2][j+2] == USER && gameBoard[i-3][j+3] == USER &&
-                   gameBoard[i-4][j+4] == USER && gameBoard[i-5][j+5] == 0)
-                {
-                    setGameBoardPoint(i-1,j+1);
-                    return true;
-                }
-                // -000--
-                else if(gameBoard[i][j] == 0 && gameBoard[i-1][j+1] == USER &&
-                        gameBoard[i-2][j+2] == USER && gameBoard[i-3][j+3] == USER &&
-                        gameBoard[i-4][j+4] == 0 && gameBoard[i-5][j+5] == 0)
-                {
-                    setGameBoardPoint(i-4,j+4);
-                    return true;
-                }
-                // -00-0-
-                else if(gameBoard[i][j] == 0 && gameBoard[i-1][j+1] == USER &&
-                        gameBoard[i-2][j+2] == USER && gameBoard[i-3][j+3] == 0 &&
-                        gameBoard[i-4][j+4] == USER && gameBoard[i-5][j+5] == 0)
-                {
-                    setGameBoardPoint(i-3,j+3);
-                    return true;
-                }
-                // -0-00-
-                else if(gameBoard[i][j] == 0 && gameBoard[i-1][j+1] == USER &&
-                        gameBoard[i-2][j+2] == 0 && gameBoard[i-3][j+3] == USER &&
-                        gameBoard[i-4][j+4] == USER && gameBoard[i-5][j+5] == 0)
-                {
-                    setGameBoardPoint(i-2,j+2);
-                    return true;
-                }
-            }
-            if(j <= 8 && i <= 8)
-            {
-                if(gameBoard[i][j] == 0 && gameBoard[i+1][j+1] == USER &&
-                   gameBoard[i+2][j+2] == 0 && gameBoard[i+3][j+3] == USER &&
-                   gameBoard[i+4][j+4] == 0 && gameBoard[i+5][j+5] == USER && gameBoard[i+6][j+6] == 0)
-                {
-                    setGameBoardPoint(i+2,j+2);
-                    return true;
-                }
-                else if(gameBoard[i][j] == 0 && gameBoard[i+1][j+1] == USER &&
-                        gameBoard[i+2][j+2] == USER && gameBoard[i+3][j+3] == 0 &&
-                        gameBoard[i+4][j+4] == 0 && gameBoard[i+5][j+5] == USER && gameBoard[i+6][j+6] == 0)
-                {
-                    setGameBoardPoint(i+4,j+4);
-                    return true;
-                }
-                else if(gameBoard[i][j] == 0 && gameBoard[i+1][j+1] == USER &&
-                        gameBoard[i+2][j+2] == 0 && gameBoard[i+3][j+3] == 0 &&
-                        gameBoard[i+2][j+4] == USER && gameBoard[i+5][j+5] == USER && gameBoard[i+6][j+6] == 0)
-                {
-                    setGameBoardPoint(i+2,j+2);
-                    return true;
-                }
-            }
-            if(j <=8 && i >= 6)
-            {
-                if(gameBoard[i][j] == 0 && gameBoard[i-1][j+1] == USER &&
-                   gameBoard[i-2][j+2] == 0 && gameBoard[i-3][j+3] == USER &&
-                   gameBoard[i-4][j+4] == 0 && gameBoard[i-5][j+5] == USER && gameBoard[i-6][j+6] == 0)
-                {
-                    setGameBoardPoint(i-2,j+2);
-                    return true;
-                }
-                else if(gameBoard[i][j] == 0 && gameBoard[i-1][j+1] == USER &&
-                        gameBoard[i-2][j+2] == USER && gameBoard[i-3][j+3] == 0 &&
-                        gameBoard[i-4][j+4] == 0 && gameBoard[i-5][j+5] == USER && gameBoard[i-6][j+6] == 0)
-                {
-                    setGameBoardPoint(i-4,j+4);
-                    return true;
-                }
-                else if(gameBoard[i][j] == 0 && gameBoard[i-1][j+1] == USER &&
-                        gameBoard[i-2][j+2] == 0 && gameBoard[i-3][j+3] == 0 &&
-                        gameBoard[i-2][j+4] == USER && gameBoard[i-5][j+5] == USER && gameBoard[i-6][j+6] == 0)
-                {
-                    setGameBoardPoint(i-2,j+2);
-                    return true;
-                }
-            }
             if(j <= 10 && i <= 10)
             {
                 // -000-
@@ -1265,6 +1409,7 @@ bool Game::lookForOpponentThreeDiagonal()
                     }
                 }
             }
+
             if(j <= 10 && i >= 4)
             {
                 // -000-
@@ -1339,17 +1484,62 @@ bool Game::lookForOpponentThreeDiagonal()
 
 bool Game::lookForCPUThree()
 {
-    if(lookForCPUThreeHorizontal())
+    if(lookForCPUThreeHorizontal1Priority())
     {
         qDebug() << "Found CPU 3 horizontal";
         return true;
     }
-    else if(lookForCPUThreeVertical())
+    else if(lookForCPUThreeVertical1Priority())
     {
         qDebug() << "Found CPU 3 vertical";
         return true;
     }
-    else if(lookForCPUThreeDiagonal())
+    else if(lookForCPUThreeDiagonal1Priority())
+    {
+        qDebug() << "Found CPU 3 diagonal";
+        return true;
+    }
+    if(lookForCPUThreeHorizontal2Priority())
+    {
+        qDebug() << "Found CPU 3 horizontal";
+        return true;
+    }
+    else if(lookForCPUThreeVertical2Priority())
+    {
+        qDebug() << "Found CPU 3 vertical";
+        return true;
+    }
+    else if(lookForCPUThreeDiagonal2Priority())
+    {
+        qDebug() << "Found CPU 3 diagonal";
+        return true;
+    }
+    if(lookForCPUThreeHorizontal3Priority())
+    {
+        qDebug() << "Found CPU 3 horizontal";
+        return true;
+    }
+    else if(lookForCPUThreeVertical3Priority())
+    {
+        qDebug() << "Found CPU 3 vertical";
+        return true;
+    }
+    else if(lookForCPUThreeDiagonal3Priority())
+    {
+        qDebug() << "Found CPU 3 diagonal";
+        return true;
+    }
+    if(lookForCPUThreeHorizontal4Priority())
+    {
+        qDebug() << "Found CPU 3 horizontal";
+        return true;
+    }
+    else if(lookForCPUThreeVertical4Priority())
+    {
+        qDebug() << "Found CPU 3 vertical";
+        return true;
+    }
+    else if(lookForCPUThreeDiagonal4Priority())
     {
         qDebug() << "Found CPU 3 diagonal";
         return true;
@@ -1357,7 +1547,7 @@ bool Game::lookForCPUThree()
     return false;
 }
 
-bool Game::lookForCPUThreeHorizontal()
+bool Game::lookForCPUThreeHorizontal1Priority()
 {
     for(int i = 0; i < BOARD_SIZE; i++)
     {
@@ -1374,6 +1564,72 @@ bool Game::lookForCPUThreeHorizontal()
                     return true;
                 }
             }
+        }
+    }
+    return false;
+}
+
+bool Game::lookForCPUThreeVertical1Priority()
+{
+    for(int i = 0; i < BOARD_SIZE; i++)
+    {
+        for(int j = 0; j < BOARD_SIZE; j++)
+        {
+            if(j <= 8)
+            {
+                // --OOO--
+                if(gameBoard[j][i] == 0 && gameBoard[j+1][i] == 0 &&
+                   gameBoard[j+2][i] == CPU && gameBoard[j+3][i] == CPU &&
+                   gameBoard[j+4][i] == CPU && gameBoard[j+5][i] == 0 && gameBoard[j+6][i] == 0)
+                {
+                    setGameBoardPoint(j+1,i);
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+bool Game::lookForCPUThreeDiagonal1Priority()
+{
+    for(int i = 0; i < BOARD_SIZE; i++)
+    {
+        for(int j = 0; j < BOARD_SIZE; j++)
+        {
+            if(j <= 8 && i <= 8)
+            {
+                // --OOO--
+                if(gameBoard[i][j] == 0 && gameBoard[i+1][j+1] == 0 &&
+                   gameBoard[i+2][j+2] == CPU && gameBoard[i+3][j+3] == CPU &&
+                   gameBoard[i+4][j+4] == CPU && gameBoard[i+5][j+5] == 0 && gameBoard[i+6][j+6] == 0)
+                {
+                    setGameBoardPoint(i+5,j+5);
+                    return true;
+                }
+            }
+            if(j <=8 && i >= 6)
+            {
+                // --OOO--
+                if(gameBoard[i][j] == 0 && gameBoard[i-1][j+1] == 0 &&
+                   gameBoard[i-2][j+2] == CPU && gameBoard[i-3][j+3] == CPU &&
+                   gameBoard[i-4][j+4] == CPU && gameBoard[i-5][j+5] == 0 && gameBoard[i-6][j+6] == 0)
+                {
+                    setGameBoardPoint(i-5,j+5);
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+bool Game::lookForCPUThreeHorizontal2Priority()
+{
+    for(int i = 0; i < BOARD_SIZE; i++)
+    {
+        for(int j = 0; j < BOARD_SIZE; j++)
+        {
             if(j <= 9)
             {
                 // --000-
@@ -1409,6 +1665,144 @@ bool Game::lookForCPUThreeHorizontal()
                     return true;
                 }
             }
+        }
+    }
+    return false;
+}
+
+bool Game::lookForCPUThreeVertical2Priority()
+{
+    for(int i = 0; i < BOARD_SIZE; i++)
+    {
+        for(int j = 0; j < BOARD_SIZE; j++)
+        {
+            if(j <= 9)
+            {
+                // --000-
+                if(gameBoard[j][i] == 0 && gameBoard[j+1][i] == 0 &&
+                   gameBoard[j+2][i] == CPU && gameBoard[j+3][i] == CPU &&
+                   gameBoard[j+4][i] == CPU && gameBoard[j+5][i] == 0)
+                {
+                    setGameBoardPoint(j+1,i);
+                    return true;
+                }
+                // -000--
+                else if(gameBoard[j][i] == 0 && gameBoard[j+1][i] == CPU &&
+                        gameBoard[j+2][i] == CPU && gameBoard[j+3][i] == CPU &&
+                        gameBoard[j+4][i] == 0 && gameBoard[j+5][i] == 0)
+                {
+                    setGameBoardPoint(j+4,i);
+                    return true;
+                }
+                // -00-0-
+                else if(gameBoard[j][i] == 0 && gameBoard[j+1][i] == CPU &&
+                        gameBoard[j+2][i] == CPU && gameBoard[j+3][i] == 0 &&
+                        gameBoard[j+4][i] == CPU && gameBoard[j+5][i] == 0)
+                {
+                    setGameBoardPoint(j+3,i);
+                    return true;
+                }
+                // -0-00-
+                else if(gameBoard[j][i] == 0 && gameBoard[j+1][i] == CPU &&
+                        gameBoard[j+2][i] == 0 && gameBoard[j+3][i] == CPU &&
+                        gameBoard[j+4][i] == CPU && gameBoard[j+5][i] == 0)
+                {
+                    setGameBoardPoint(j+2,i);
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+bool Game::lookForCPUThreeDiagonal2Priority()
+{
+    for(int i = 0; i < BOARD_SIZE; i++)
+    {
+        for(int j = 0; j < BOARD_SIZE; j++)
+        {
+            if(j <= 9 && i <= 9)
+            {
+                // --000-
+                if(gameBoard[i][j] == 0 && gameBoard[i+1][j+1] == 0 &&
+                   gameBoard[i+2][j+2] == CPU && gameBoard[i+3][j+3] == CPU &&
+                   gameBoard[i+4][j+4] == CPU && gameBoard[i+5][j+5] == 0)
+                {
+                    setGameBoardPoint(i+1,j+1);
+                    return true;
+                }
+                // -000--
+                else if(gameBoard[i][j] == 0 && gameBoard[i+1][j+1] == CPU &&
+                        gameBoard[i+2][j+2] == CPU && gameBoard[i+3][j+3] == CPU &&
+                        gameBoard[i+4][j+4] == 0 && gameBoard[i+5][j+5] == 0)
+                {
+                    setGameBoardPoint(i+4,j+4);
+                    return true;
+                }
+                // -00-0-
+                else if(gameBoard[i][j] == 0 && gameBoard[i+1][j+1] == CPU &&
+                        gameBoard[i+2][j+2] == CPU && gameBoard[i+3][j+3] == 0 &&
+                        gameBoard[i+4][j+4] == CPU && gameBoard[i+5][j+5] == 0)
+                {
+                    setGameBoardPoint(i+3,j+3);
+                    return true;
+                }
+                // -0-00-
+                else if(gameBoard[i][j] == 0 && gameBoard[i+1][j+1] == CPU &&
+                        gameBoard[i+2][j+2] == 0 && gameBoard[i+3][j+3] == CPU &&
+                        gameBoard[i+4][j+4] == CPU && gameBoard[i+5][j+5] == 0)
+                {
+                    setGameBoardPoint(i+2,j+2);
+                    return true;
+                }
+            }
+            if(j <= 9 && i >= 5)
+            {
+                // --000-
+                if(gameBoard[i][j] == 0 && gameBoard[i-1][j+1] == 0 &&
+                   gameBoard[i-2][j+2] == CPU && gameBoard[i-3][j+3] == CPU &&
+                   gameBoard[i-4][j+4] == CPU && gameBoard[i-5][j+5] == 0)
+                {
+                    setGameBoardPoint(i-1,j+1);
+                    return true;
+                }
+                // -000--
+                else if(gameBoard[i][j] == 0 && gameBoard[i-1][j+1] == CPU &&
+                        gameBoard[i-2][j+2] == CPU && gameBoard[i-3][j+3] == CPU &&
+                        gameBoard[i-4][j+4] == 0 && gameBoard[i-5][j+5] == 0)
+                {
+                    setGameBoardPoint(i-4,j+4);
+                    return true;
+                }
+                // -00-0-
+                else if(gameBoard[i][j] == 0 && gameBoard[i-1][j+1] == CPU &&
+                        gameBoard[i-2][j+2] == CPU && gameBoard[i-3][j+3] == 0 &&
+                        gameBoard[i-4][j+4] == CPU && gameBoard[i-5][j+5] == 0)
+                {
+                    setGameBoardPoint(i-3,j+3);
+                    return true;
+                }
+                // -0-00-
+                else if(gameBoard[i][j] == 0 && gameBoard[i-1][j+1] == CPU &&
+                        gameBoard[i-2][j+2] == 0 && gameBoard[i-3][j+3] == CPU &&
+                        gameBoard[i-4][j+4] == CPU && gameBoard[i-5][j+5] == 0)
+                {
+                    setGameBoardPoint(i-2,j+2);
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+bool Game::lookForCPUThreeHorizontal3Priority()
+{
+    for(int i = 0; i < BOARD_SIZE; i++)
+    {
+        for(int j = 0; j < BOARD_SIZE; j++)
+        {
             if(j <= 8)
             {
                 if(gameBoard[i][j] == 0 && gameBoard[i][j+1] == CPU &&
@@ -1433,6 +1827,111 @@ bool Game::lookForCPUThreeHorizontal()
                     return true;
                 }
             }
+        }
+    }
+    return false;
+}
+
+bool Game::lookForCPUThreeVertical3Priority()
+{
+    for(int i = 0; i < BOARD_SIZE; i++)
+    {
+        for(int j = 0; j < BOARD_SIZE; j++)
+        {
+            if(j <= 8)
+            {
+                if(gameBoard[j][i] == 0 && gameBoard[j+1][i] == CPU &&
+                   gameBoard[j+2][i] == 0 && gameBoard[j+3][i] == CPU &&
+                   gameBoard[j+4][i] == 0 && gameBoard[j+5][i] == CPU && gameBoard[j+6][i] == 0)
+                {
+                    setGameBoardPoint(j+2,i);
+                    return true;
+                }
+                else if(gameBoard[j][i] == 0 && gameBoard[j+1][i] == CPU &&
+                        gameBoard[j+2][i] == CPU && gameBoard[j+3][i] == 0 &&
+                        gameBoard[j+4][i] == 0 && gameBoard[j+5][i] == CPU && gameBoard[j+6][i] == 0)
+                {
+                    setGameBoardPoint(j+4,i);
+                    return true;
+                }
+                else if(gameBoard[j][i] == 0 && gameBoard[j+1][i] == CPU &&
+                        gameBoard[j+2][i] == 0 && gameBoard[j+3][i] == 0 &&
+                        gameBoard[j+4][i] == CPU && gameBoard[j+5][i] == CPU && gameBoard[j+6][i] == 0)
+                {
+                    setGameBoardPoint(j+2,i);
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+bool Game::lookForCPUThreeDiagonal3Priority()
+{
+    for(int i = 0; i < BOARD_SIZE; i++)
+    {
+        for(int j = 0; j < BOARD_SIZE; j++)
+        {
+            if(j <= 8 && i <= 8)
+            {
+                if(gameBoard[i][j] == 0 && gameBoard[i+1][j+1] == CPU &&
+                   gameBoard[i+2][j+2] == 0 && gameBoard[i+3][j+3] == CPU &&
+                   gameBoard[i+4][j+4] == 0 && gameBoard[i+5][j+5] == CPU && gameBoard[i+6][j+6] == 0)
+                {
+                    setGameBoardPoint(i+2,j+2);
+                    return true;
+                }
+                else if(gameBoard[i][j] == 0 && gameBoard[i+1][j+1] == CPU &&
+                        gameBoard[i+2][j+2] == CPU && gameBoard[i+3][j+3] == 0 &&
+                        gameBoard[i+4][j+4] == 0 && gameBoard[i+5][j+5] == CPU && gameBoard[i+6][j+6] == 0)
+                {
+                    setGameBoardPoint(i+4,j+4);
+                    return true;
+                }
+                else if(gameBoard[i][j] == 0 && gameBoard[i+1][j+1] == CPU &&
+                        gameBoard[i+2][j+2] == 0 && gameBoard[i+3][j+3] == 0 &&
+                        gameBoard[i+2][j+4] == CPU && gameBoard[i+5][j+5] == CPU && gameBoard[i+6][j+6] == 0)
+                {
+                    setGameBoardPoint(i+2,j+2);
+                    return true;
+                }
+            }
+            if(j <=8 && i >= 6)
+            {
+                if(gameBoard[i][j] == 0 && gameBoard[i-1][j+1] == CPU &&
+                   gameBoard[i-2][j+2] == 0 && gameBoard[i-3][j+3] == CPU &&
+                   gameBoard[i-4][j+4] == 0 && gameBoard[i-5][j+5] == CPU && gameBoard[i-6][j+6] == 0)
+                {
+                    setGameBoardPoint(i-2,j+2);
+                    return true;
+                }
+                else if(gameBoard[i][j] == 0 && gameBoard[i-1][j+1] == CPU &&
+                        gameBoard[i-2][j+2] == CPU && gameBoard[i-3][j+3] == 0 &&
+                        gameBoard[i-4][j+4] == 0 && gameBoard[i-5][j+5] == CPU && gameBoard[i-6][j+6] == 0)
+                {
+                    setGameBoardPoint(i-4,j+4);
+                    return true;
+                }
+                else if(gameBoard[i][j] == 0 && gameBoard[i-1][j+1] == CPU &&
+                        gameBoard[i-2][j+2] == 0 && gameBoard[i-3][j+3] == 0 &&
+                        gameBoard[i-2][j+4] == CPU && gameBoard[i-5][j+5] == CPU && gameBoard[i-6][j+6] == 0)
+                {
+                    setGameBoardPoint(i-2,j+2);
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+bool Game::lookForCPUThreeHorizontal4Priority()
+{
+    for(int i = 0; i < BOARD_SIZE; i++)
+    {
+        for(int j = 0; j < BOARD_SIZE; j++)
+        {
             if(j <= 10)
             {
                 // -000-
@@ -1505,82 +2004,12 @@ bool Game::lookForCPUThreeHorizontal()
     return false;
 }
 
-bool Game::lookForCPUThreeVertical()
+bool Game::lookForCPUThreeVertical4Priority()
 {
     for(int i = 0; i < BOARD_SIZE; i++)
     {
         for(int j = 0; j < BOARD_SIZE; j++)
         {
-            if(j <= 8)
-            {
-                // --OOO--
-                if(gameBoard[j][i] == 0 && gameBoard[j+1][i] == 0 &&
-                   gameBoard[j+2][i] == CPU && gameBoard[j+3][i] == CPU &&
-                   gameBoard[j+4][i] == CPU && gameBoard[j+5][i] == 0 && gameBoard[j+6][i] == 0)
-                {
-                    setGameBoardPoint(j+1,i);
-                    return true;
-                }
-            }
-            if(j <= 9)
-            {
-                // --000-
-                if(gameBoard[j][i] == 0 && gameBoard[j+1][i] == 0 &&
-                   gameBoard[j+2][i] == CPU && gameBoard[j+3][i] == CPU &&
-                   gameBoard[j+4][i] == CPU && gameBoard[j+5][i] == 0)
-                {
-                    setGameBoardPoint(j+1,i);
-                    return true;
-                }
-                // -000--
-                else if(gameBoard[j][i] == 0 && gameBoard[j+1][i] == CPU &&
-                        gameBoard[j+2][i] == CPU && gameBoard[j+3][i] == CPU &&
-                        gameBoard[j+4][i] == 0 && gameBoard[j+5][i] == 0)
-                {
-                    setGameBoardPoint(j+4,i);
-                    return true;
-                }
-                // -00-0-
-                else if(gameBoard[j][i] == 0 && gameBoard[j+1][i] == CPU &&
-                        gameBoard[j+2][i] == CPU && gameBoard[j+3][i] == 0 &&
-                        gameBoard[j+4][i] == CPU && gameBoard[j+5][i] == 0)
-                {
-                    setGameBoardPoint(j+3,i);
-                    return true;
-                }
-                // -0-00-
-                else if(gameBoard[j][i] == 0 && gameBoard[j+1][i] == CPU &&
-                        gameBoard[j+2][i] == 0 && gameBoard[j+3][i] == CPU &&
-                        gameBoard[j+4][i] == CPU && gameBoard[j+5][i] == 0)
-                {
-                    setGameBoardPoint(j+2,i);
-                    return true;
-                }
-            }
-            if(j <= 8)
-            {
-                if(gameBoard[j][i] == 0 && gameBoard[j+1][i] == CPU &&
-                   gameBoard[j+2][i] == 0 && gameBoard[j+3][i] == CPU &&
-                   gameBoard[j+4][i] == 0 && gameBoard[j+5][i] == CPU && gameBoard[j+6][i] == 0)
-                {
-                    setGameBoardPoint(j+2,i);
-                    return true;
-                }
-                else if(gameBoard[j][i] == 0 && gameBoard[j+1][i] == CPU &&
-                        gameBoard[j+2][i] == CPU && gameBoard[j+3][i] == 0 &&
-                        gameBoard[j+4][i] == 0 && gameBoard[j+5][i] == CPU && gameBoard[j+6][i] == 0)
-                {
-                    setGameBoardPoint(j+4,i);
-                    return true;
-                }
-                else if(gameBoard[j][i] == 0 && gameBoard[j+1][i] == CPU &&
-                        gameBoard[j+2][i] == 0 && gameBoard[j+3][i] == 0 &&
-                        gameBoard[j+4][i] == CPU && gameBoard[j+5][i] == CPU && gameBoard[j+6][i] == 0)
-                {
-                    setGameBoardPoint(j+2,i);
-                    return true;
-                }
-            }
             if(j <= 10)
             {
                 // -000-
@@ -1653,152 +2082,12 @@ bool Game::lookForCPUThreeVertical()
     return false;
 }
 
-bool Game::lookForCPUThreeDiagonal()
+bool Game::lookForCPUThreeDiagonal4Priority()
 {
     for(int i = 0; i < BOARD_SIZE; i++)
     {
         for(int j = 0; j < BOARD_SIZE; j++)
         {
-            if(j <= 8 && i <= 8)
-            {
-                // --OOO--
-                if(gameBoard[i][j] == 0 && gameBoard[i+1][j+1] == 0 &&
-                   gameBoard[i+2][j+2] == CPU && gameBoard[i+3][j+3] == CPU &&
-                   gameBoard[i+4][j+4] == CPU && gameBoard[i+5][j+5] == 0 && gameBoard[i+6][j+6] == 0)
-                {
-                    setGameBoardPoint(i+5,j+5);
-                    return true;
-                }
-            }
-            if(j <=8 && i >= 6)
-            {
-                // --OOO--
-                if(gameBoard[i][j] == 0 && gameBoard[i-1][j+1] == 0 &&
-                   gameBoard[i-2][j+2] == CPU && gameBoard[i-3][j+3] == CPU &&
-                   gameBoard[i-4][j+4] == CPU && gameBoard[i-5][j+5] == 0 && gameBoard[i-6][j+6] == 0)
-                {
-                    setGameBoardPoint(i-5,j+5);
-                    return true;
-                }
-            }
-            if(j <= 9 && i <= 9)
-            {
-                // --000-
-                if(gameBoard[i][j] == 0 && gameBoard[i+1][j+1] == 0 &&
-                   gameBoard[i+2][j+2] == CPU && gameBoard[i+3][j+3] == CPU &&
-                   gameBoard[i+4][j+4] == CPU && gameBoard[i+5][j+5] == 0)
-                {
-                    setGameBoardPoint(i+1,j+1);
-                    return true;
-                }
-                // -000--
-                else if(gameBoard[i][j] == 0 && gameBoard[i+1][j+1] == CPU &&
-                        gameBoard[i+2][j+2] == CPU && gameBoard[i+3][j+3] == CPU &&
-                        gameBoard[i+4][j+4] == 0 && gameBoard[i+5][j+5] == 0)
-                {
-                    setGameBoardPoint(i+4,j+4);
-                    return true;
-                }
-                // -00-0-
-                else if(gameBoard[i][j] == 0 && gameBoard[i+1][j+1] == CPU &&
-                        gameBoard[i+2][j+2] == CPU && gameBoard[i+3][j+3] == 0 &&
-                        gameBoard[i+4][j+4] == CPU && gameBoard[i+5][j+5] == 0)
-                {
-                    setGameBoardPoint(i+3,j+3);
-                    return true;
-                }
-                // -0-00-
-                else if(gameBoard[i][j] == 0 && gameBoard[i+1][j+1] == CPU &&
-                        gameBoard[i+2][j+2] == 0 && gameBoard[i+3][j+3] == CPU &&
-                        gameBoard[i+4][j+4] == CPU && gameBoard[i+5][j+5] == 0)
-                {
-                    setGameBoardPoint(i+2,j+2);
-                    return true;
-                }
-            }
-            if(j <= 9 && i >= 5)
-            {
-                // --000-
-                if(gameBoard[i][j] == 0 && gameBoard[i-1][j+1] == 0 &&
-                   gameBoard[i-2][j+2] == CPU && gameBoard[i-3][j+3] == CPU &&
-                   gameBoard[i-4][j+4] == CPU && gameBoard[i-5][j+5] == 0)
-                {
-                    setGameBoardPoint(i-1,j+1);
-                    return true;
-                }
-                // -000--
-                else if(gameBoard[i][j] == 0 && gameBoard[i-1][j+1] == CPU &&
-                        gameBoard[i-2][j+2] == CPU && gameBoard[i-3][j+3] == CPU &&
-                        gameBoard[i-4][j+4] == 0 && gameBoard[i-5][j+5] == 0)
-                {
-                    setGameBoardPoint(i-4,j+4);
-                    return true;
-                }
-                // -00-0-
-                else if(gameBoard[i][j] == 0 && gameBoard[i-1][j+1] == CPU &&
-                        gameBoard[i-2][j+2] == CPU && gameBoard[i-3][j+3] == 0 &&
-                        gameBoard[i-4][j+4] == CPU && gameBoard[i-5][j+5] == 0)
-                {
-                    setGameBoardPoint(i-3,j+3);
-                    return true;
-                }
-                // -0-00-
-                else if(gameBoard[i][j] == 0 && gameBoard[i-1][j+1] == CPU &&
-                        gameBoard[i-2][j+2] == 0 && gameBoard[i-3][j+3] == CPU &&
-                        gameBoard[i-4][j+4] == CPU && gameBoard[i-5][j+5] == 0)
-                {
-                    setGameBoardPoint(i-2,j+2);
-                    return true;
-                }
-            }
-            if(j <= 8 && i <= 8)
-            {
-                if(gameBoard[i][j] == 0 && gameBoard[i+1][j+1] == CPU &&
-                   gameBoard[i+2][j+2] == 0 && gameBoard[i+3][j+3] == CPU &&
-                   gameBoard[i+4][j+4] == 0 && gameBoard[i+5][j+5] == CPU && gameBoard[i+6][j+6] == 0)
-                {
-                    setGameBoardPoint(i+2,j+2);
-                    return true;
-                }
-                else if(gameBoard[i][j] == 0 && gameBoard[i+1][j+1] == CPU &&
-                        gameBoard[i+2][j+2] == CPU && gameBoard[i+3][j+3] == 0 &&
-                        gameBoard[i+4][j+4] == 0 && gameBoard[i+5][j+5] == CPU && gameBoard[i+6][j+6] == 0)
-                {
-                    setGameBoardPoint(i+4,j+4);
-                    return true;
-                }
-                else if(gameBoard[i][j] == 0 && gameBoard[i+1][j+1] == CPU &&
-                        gameBoard[i+2][j+2] == 0 && gameBoard[i+3][j+3] == 0 &&
-                        gameBoard[i+2][j+4] == CPU && gameBoard[i+5][j+5] == CPU && gameBoard[i+6][j+6] == 0)
-                {
-                    setGameBoardPoint(i+2,j+2);
-                    return true;
-                }
-            }
-            if(j <=8 && i >= 6)
-            {
-                if(gameBoard[i][j] == 0 && gameBoard[i-1][j+1] == CPU &&
-                   gameBoard[i-2][j+2] == 0 && gameBoard[i-3][j+3] == CPU &&
-                   gameBoard[i-4][j+4] == 0 && gameBoard[i-5][j+5] == CPU && gameBoard[i-6][j+6] == 0)
-                {
-                    setGameBoardPoint(i-2,j+2);
-                    return true;
-                }
-                else if(gameBoard[i][j] == 0 && gameBoard[i-1][j+1] == CPU &&
-                        gameBoard[i-2][j+2] == CPU && gameBoard[i-3][j+3] == 0 &&
-                        gameBoard[i-4][j+4] == 0 && gameBoard[i-5][j+5] == CPU && gameBoard[i-6][j+6] == 0)
-                {
-                    setGameBoardPoint(i-4,j+4);
-                    return true;
-                }
-                else if(gameBoard[i][j] == 0 && gameBoard[i-1][j+1] == CPU &&
-                        gameBoard[i-2][j+2] == 0 && gameBoard[i-3][j+3] == 0 &&
-                        gameBoard[i-2][j+4] == CPU && gameBoard[i-5][j+5] == CPU && gameBoard[i-6][j+6] == 0)
-                {
-                    setGameBoardPoint(i-2,j+2);
-                    return true;
-                }
-            }
             if(j <= 10 && i <= 10)
             {
                 // -000-
@@ -1866,6 +2155,7 @@ bool Game::lookForCPUThreeDiagonal()
                     }
                 }
             }
+
             if(j <= 10 && i >= 4)
             {
                 // -000-

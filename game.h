@@ -69,14 +69,38 @@ private:
     bool lookForOpponentSpecialPatternDiagonal();
 
     bool lookForOpponentThree();
-    bool lookForOpponentThreeHorizontal();
-    bool lookForOpponentThreeVertical();
-    bool lookForOpponentThreeDiagonal();
+    bool lookForOpponentThreeHorizontal1Priority();
+    bool lookForOpponentThreeVertical1Priority();
+    bool lookForOpponentThreeDiagonal1Priority();
+
+    bool lookForOpponentThreeHorizontal2Priority();
+    bool lookForOpponentThreeVertical2Priority();
+    bool lookForOpponentThreeDiagonal2Priority();
+
+    bool lookForOpponentThreeHorizontal3Priority();
+    bool lookForOpponentThreeVertical3Priority();
+    bool lookForOpponentThreeDiagonal3Priority();
+
+    bool lookForOpponentThreeHorizontal4Priority();
+    bool lookForOpponentThreeVertical4Priority();
+    bool lookForOpponentThreeDiagonal4Priority();
 
     bool lookForCPUThree();
-    bool lookForCPUThreeHorizontal();
-    bool lookForCPUThreeVertical();
-    bool lookForCPUThreeDiagonal();
+    bool lookForCPUThreeHorizontal1Priority();
+    bool lookForCPUThreeVertical1Priority();
+    bool lookForCPUThreeDiagonal1Priority();
+
+    bool lookForCPUThreeHorizontal2Priority();
+    bool lookForCPUThreeVertical2Priority();
+    bool lookForCPUThreeDiagonal2Priority();
+
+    bool lookForCPUThreeHorizontal3Priority();
+    bool lookForCPUThreeVertical3Priority();
+    bool lookForCPUThreeDiagonal3Priority();
+
+    bool lookForCPUThreeHorizontal4Priority();
+    bool lookForCPUThreeVertical4Priority();
+    bool lookForCPUThreeDiagonal4Priority();
 
     bool lookForCPUTwo();
     bool lookForCPUTwoHorizontal();
