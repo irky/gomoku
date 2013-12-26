@@ -112,6 +112,16 @@ private:
     bool lookForCPUSingleVertical();
     bool lookForCPUSingleDiagonal();
 
+    bool lookForOpponentTwo();
+    bool lookForOpponentTwoHorizontal();
+    bool lookForOpponentTwoVertical();
+    bool lookForOpponentTwoDiagonal();
+
+    bool lookForOpponentSingle();
+    bool lookForOpponentSingleHorizontal();
+    bool lookForOpponentSingleVertical();
+    bool lookForOpponentSingleDiagonal();
+
     bool gameFinished;
     void setGameFinished(const bool &value);
 
@@ -121,6 +131,9 @@ private:
     void setGameBoardPoint(const int &row, const int &col);
 
     std::vector< std::vector<int> > gameBoard;
+
+    std::vector< std::vector<int> > pointBoard;
+    void cleanPointBoard();
 
 };
 

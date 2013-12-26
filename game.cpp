@@ -9,12 +9,24 @@ Game::Game() :
     for(int i = 0; i < BOARD_SIZE; i++)
     {
         std::vector<int> vect;
-        vect.reserve(15);
+        vect.reserve(BOARD_SIZE);
         for(int j = 0; j < BOARD_SIZE; j++)
         {
             vect.push_back(0);
         }
         gameBoard.push_back(vect);
+    }
+
+    pointBoard.reserve(BOARD_SIZE);
+    for(int i = 0; i < BOARD_SIZE; i++)
+    {
+        std::vector<int> vect;
+        vect.reserve(BOARD_SIZE);
+        for(int j = 0; j < BOARD_SIZE; j++)
+        {
+            vect.push_back(0);
+        }
+        pointBoard.push_back(vect);
     }
 }
 
@@ -2555,22 +2567,6 @@ bool Game::lookForCPUSingleHorizontal()
                     return true;
                 }
             }
-            /*else if(j < 14)
-            {
-                if(gameBoard[i][j] == CPU && gameBoard[i][j+1] == 0)
-                {
-                    setGameBoardPoint(i,j+1);
-                    return true;
-                }
-            }
-            else if(j > 0)
-            {
-                if(gameBoard[i][j] == CPU && gameBoard[i][j-1] == 0)
-                {
-                    setGameBoardPoint(i,j-1);
-                    return true;
-                }
-            }*/
         }
     }
     return false;
@@ -2714,6 +2710,46 @@ bool Game::lookForCPUSingleDiagonal()
     return false;
 }
 
+bool Game::lookForOpponentTwo()
+{
+    return false;
+}
+
+bool Game::lookForOpponentTwoHorizontal()
+{
+    return false;
+}
+
+bool Game::lookForOpponentTwoVertical()
+{
+    return false;
+}
+
+bool Game::lookForOpponentTwoDiagonal()
+{
+    return false;
+}
+
+bool Game::lookForOpponentSingle()
+{
+    return false;
+}
+
+bool Game::lookForOpponentSingleHorizontal()
+{
+    return false;
+}
+
+bool Game::lookForOpponentSingleVertical()
+{
+    return false;
+}
+
+bool Game::lookForOpponentSingleDiagonal()
+{
+    return false;
+}
+
 void Game::setGameFinished(const bool &value)
 {
     gameFinished = value;
@@ -2819,7 +2855,6 @@ void Game::clearGameStatus(const bool &value)
             gameBoard[i][j] = 0;
         }
     }
-
 }
 
 int Game::updateGameBoard(const int &x, const int &y, const int &who)
@@ -2857,4 +2892,15 @@ void Game::setGameBoardPoint(const int &row, const int &col)
 {
     gameBoardPoint.first = row;
     gameBoardPoint.second = col;
+}
+
+void Game::cleanPointBoard()
+{
+    for(int i = 0; i < BOARD_SIZE; i++)
+    {
+        for(int j = 0; j < BOARD_SIZE; j++)
+        {
+            pointBoard[i][j] = 0;
+        }
+    }
 }
