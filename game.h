@@ -48,25 +48,16 @@ private:
     void makeUserMove(std::pair<int, int> boardPoint, const int &row, const int &col);
 
     void buildThreat();
-    bool lookForCPUFour();
-    bool lookForCPUFourHorizontal();
-    bool lookForCPUFourVertical();
-    bool lookForCPUFourDiagonal();
 
-    bool lookForOpponentFour();
-    bool lookForOpponentFourHorizontal();
-    bool lookForOpponentFourVertical();
-    bool lookForOpponentFourDiagonal();
+    void lookForFour();
+    void lookForFourVertical(const int &who, const int &points);
+    void lookForFourHorizontal(const int &who, const int &points);
+    void lookForCPUFourDiagonal(const int &who, const int &points);
 
-    bool lookForCPUSpecialPattern();
-    bool lookForCPUSpecialPatternHorizontal();
-    bool lookForCPUSpecialPatternVertical();
-    bool lookForCPUSpecialPatternDiagonal();
-
-    bool lookForOpponentSpecialPattern();
-    bool lookForOpponentSpecialPatternHorizontal();
-    bool lookForOpponentSpecialPatternVertical();
-    bool lookForOpponentSpecialPatternDiagonal();
+    void lookForBrokenFour();
+    void lookForBrokenFourVertical(const int &who, const int &points);
+    void lookForBrokenFourHorizontal(const int &who, const int &points);
+    void lookForBrokenFourDiagonal(const int &who, const int &points);
 
     bool lookForOpponentThree();
     bool lookForOpponentThreeHorizontal1Priority();
