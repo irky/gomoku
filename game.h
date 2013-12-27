@@ -59,39 +59,22 @@ private:
     void lookForBrokenFourHorizontal(const int &who, const int &points);
     void lookForBrokenFourDiagonal(const int &who, const int &points);
 
-    bool lookForOpponentThree();
-    bool lookForOpponentThreeHorizontal1Priority();
-    bool lookForOpponentThreeVertical1Priority();
-    bool lookForOpponentThreeDiagonal1Priority();
+    void lookForThree();
+    void lookForThreeVertical1Priority(const int &who, const int &pointsHigh, const int &pointsLow);
+    void lookForThreeHorizontal1Priority(const int &who, const int &pointsHigh, const int &pointsLow);
+    void lookForThreeDiagonal1Priority(const int &who, const int &pointsHigh, const int &pointsLow);
 
-    bool lookForOpponentThreeHorizontal2Priority();
-    bool lookForOpponentThreeVertical2Priority();
-    bool lookForOpponentThreeDiagonal2Priority();
+    void lookForThreeVertical2Priority(const int &who, const int &pointsHigh, const inst &pointsMedium, const int &pointsLow);
+    void lookForThreeHorizontal2Priority(const int &who, const int &pointsHigh, const inst &pointsMedium, const int &pointsLow);
+    void lookForThreeDiagonal2Priority(const int &who, const int &pointsHigh, const inst &pointsMedium, const int &pointsLow);
 
-    bool lookForOpponentThreeHorizontal3Priority();
-    bool lookForOpponentThreeVertical3Priority();
-    bool lookForOpponentThreeDiagonal3Priority();
+    void lookForThreeVertical3Priority(const int &who, const int &pointsHigh, const int &pointsLow);
+    void lookForThreeHorizontal3Priority(const int &who, const int &pointsHigh, const int &pointsLow);
+    void lookForThreeDiagonal3Priority(const int &who, const int &pointsHigh, const int &pointsLow);
 
-    bool lookForOpponentThreeHorizontal4Priority();
-    bool lookForOpponentThreeVertical4Priority();
-    bool lookForOpponentThreeDiagonal4Priority();
-
-    bool lookForCPUThree();
-    bool lookForCPUThreeHorizontal1Priority();
-    bool lookForCPUThreeVertical1Priority();
-    bool lookForCPUThreeDiagonal1Priority();
-
-    bool lookForCPUThreeHorizontal2Priority();
-    bool lookForCPUThreeVertical2Priority();
-    bool lookForCPUThreeDiagonal2Priority();
-
-    bool lookForCPUThreeHorizontal3Priority();
-    bool lookForCPUThreeVertical3Priority();
-    bool lookForCPUThreeDiagonal3Priority();
-
-    bool lookForCPUThreeHorizontal4Priority();
-    bool lookForCPUThreeVertical4Priority();
-    bool lookForCPUThreeDiagonal4Priority();
+    void lookForThreeVertical4Priority(const int &who, const int &points);
+    void lookForThreeHorizontal4Priority(const int &who, const int &points);
+    void lookForThreeDiagonal4Priority(const int &who, const int &points);
 
     bool lookForCPUTwo();
     bool lookForCPUTwoHorizontal();
