@@ -3,7 +3,7 @@
 Game::Game() :
     gameFinished(false),
     firstCPUMove(true),
-    gameBoardPoint(0,0)
+    gameBoardPoint(7,7)
 {
     gameBoard.reserve(BOARD_SIZE);
     for(int i = 0; i < BOARD_SIZE; i++)
@@ -184,19 +184,10 @@ bool Game::checkWinDiagonal(const int& who)
 
 void Game::makeFirstCPUMove()
 {
-    // TODO: look for user's first move and place rock nearby
-    if(checkIfMovePossible(8,8))
-    {
-        setGameBoardPoint(4,4);
-        makeCPUMove(gameBoardPoint.first,gameBoardPoint.second);
-        firstCPUMove = false;
-    }
-    else
-    {
-        setGameBoardPoint(10,10);
-        makeCPUMove(gameBoardPoint.first,gameBoardPoint.second);
-        firstCPUMove = false;
-    }
+    firstCPUMove = false;
+    lookForSingle();
+    findMaxInPointBoard();
+    makeCPUMove(gameBoardPoint.first, gameBoardPoint.second);
 }
 
 void Game::lookForFourVertical(const int &who, const int &points)
@@ -2134,6 +2125,7 @@ void Game::clearGameStatus(const bool &value)
             gameBoard[i][j] = 0;
         }
     }
+    setGameBoardPoint(7+abs((7-gameBoardPoint.first)), 7+abs((7-gameBoardPoint.second)));
 }
 
 int Game::updateGameBoard(const int &x, const int &y, const int &who)
