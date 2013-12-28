@@ -34,5 +34,9 @@ static const int CPU_3_PRIO_4_LOW = 20;
 static const int USER_3_PRIO_4_HIGH = 80;
 static const int USER_3_PRIO_4_LOW = 60;
 
+static const int CPU_2_HIGH = 20;
+static const int CPU_2_LOW = 10;
+static const int USER_2_HIGH = 20;
+static const int USER_2_LOW = 10;
 
 #endif // CONSTANTS_H

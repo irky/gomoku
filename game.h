@@ -76,20 +76,15 @@ private:
     void lookForThreeHorizontal4Priority(const int &who, const int &points);
     void lookForThreeDiagonal4Priority(const int &who, const int &points);
 
-    bool lookForCPUTwo();
-    bool lookForCPUTwoHorizontal();
-    bool lookForCPUTwoVertical();
-    bool lookForCPUTwoDiagonal();
+    void lookForTwo();
+    void lookForTwoVertical(const int &who, const int &pointsHigh, const int &pointsLow);
+    void lookForTwoHorizontal(const int &who, const int &pointsHigh, const int &pointsLow);
+    void lookForTwoDiagonal(const int &who, const int &pointsHigh, const int &pointsLow);
 
     bool lookForCPUSingle();
     bool lookForCPUSingleHorizontal();
     bool lookForCPUSingleVertical();
     bool lookForCPUSingleDiagonal();
-
-    bool lookForOpponentTwo();
-    bool lookForOpponentTwoHorizontal();
-    bool lookForOpponentTwoVertical();
-    bool lookForOpponentTwoDiagonal();
 
     bool lookForOpponentSingle();
     bool lookForOpponentSingleHorizontal();

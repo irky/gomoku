@@ -208,7 +208,7 @@ void Game::buildThreat()
     }
     else
     {
-        if(lookForCPUTwo())
+        if(lookForTwo())
         {
             return;
         }
@@ -1314,27 +1314,17 @@ void Game::lookForThreeDiagonal4Priority(const int &who, const int &points)
     }
 }
 
-bool Game::lookForCPUTwo()
+void Game::lookForTwo()
 {
-    if(lookForCPUTwoHorizontal())
-    {
-        qDebug() << "Found CPU two side 2 horizontal";
-        return true;
-    }
-    else if(lookForCPUTwoVertical())
-    {
-        qDebug() << "Found CPU two side 2 vertical";
-        return true;
-    }
-    else if(lookForCPUTwoDiagonal())
-    {
-        qDebug() << "Found CPU two side 2 diagonal";
-        return true;
-    }
-    return false;
+    lookForTwoHorizontal(CPU, CPU_2_HIGH, CPU_2_LOW);
+    lookForTwoHorizontal(USER, USER_2_HIGH, USER_2_LOW);
+    lookForTwoVertical(CPU, CPU_2_HIGH, CPU_2_LOW);
+    lookForTwoVertical(USER, USER_2_HIGH, USER_2_LOW);
+    lookForTwoDiagonal(CPU, CPU_2_HIGH, CPU_2_LOW);
+    lookForTwoDiagonal(USER, USER_2_HIGH, USER_2_LOW);
 }
 
-bool Game::lookForCPUTwoHorizontal()
+void Game::lookForTwoHorizontal(const int &who, const int &pointsHigh, const int &pointsLow)
 {
     for(unsigned int i = 0; i < BOARD_SIZE; i++)
     {
@@ -1344,60 +1334,129 @@ bool Game::lookForCPUTwoHorizontal()
             {
                 // --OO-
                 if(gameBoard[i][j] == 0 && gameBoard[i][j+1] == 0 &&
-                   gameBoard[i][j+2] == CPU && gameBoard[i][j+3] == CPU && gameBoard[i][j+4] == 0)
+                   gameBoard[i][j+2] == who && gameBoard[i][j+3] == who && gameBoard[i][j+4] == 0)
                 {
-                    setGameBoardPoint(i,j+1);
-                    return true;
+                    if(CPU == who)
+                    {
+                        pointBoard[i][j] += pointsHigh;
+                        pointBoard[i][j+1] += pointsLow;
+                        pointBoard[i][j+4] += pointsLow;
+                    }
+                    else if(USER == who)
+                    {
+                        pointBoard[i][j] += pointsLow;
+                        pointBoard[i][j+1] += pointsHigh;
+                        pointBoard[i][j+4] += pointsHigh;
+                    }
                 }
                 // -OO--
-                else if(gameBoard[i][j] == 0 && gameBoard[i][j+1] == CPU &&
-                        gameBoard[i][j+2] == CPU && gameBoard[i][j+3] == 0 && gameBoard[i][j+4] == 0)
+                else if(gameBoard[i][j] == 0 && gameBoard[i][j+1] == who &&
+                        gameBoard[i][j+2] == who && gameBoard[i][j+3] == 0 && gameBoard[i][j+4] == 0)
                 {
-                    setGameBoardPoint(i,j+3);
-                    return true;
+                    if(CPU == who)
+                    {
+                        pointBoard[i][j] += pointsLow;
+                        pointBoard[i][j+3] += pointsLow;
+                        pointBoard[i][j+4] += pointsHigh;
+                    }
+                    else if(USER == who)
+                    {
+                        pointBoard[i][j] += pointsHigh;
+                        pointBoard[i][j+3] += pointsHigh;
+                        pointBoard[i][j+4] += pointsLow;
+                    }
                 }
                 // -0-0-
-                else if(gameBoard[i][j] == 0 && gameBoard[i][j+1] == CPU &&
-                        gameBoard[i][j+2] == 0 && gameBoard[i][j+3] == CPU && gameBoard[i][j+4] == 0)
+                else if(gameBoard[i][j] == 0 && gameBoard[i][j+1] == who &&
+                        gameBoard[i][j+2] == 0 && gameBoard[i][j+3] == who && gameBoard[i][j+4] == 0)
                 {
-                    setGameBoardPoint(i,j+2);
-                    return true;
+                    if(CPU == who)
+                    {
+                        pointBoard[i][j] += pointsHigh;
+                        pointBoard[i][j+2] += pointsLow;
+                        pointBoard[i][j+4] += pointsHigh;
+                    }
+                    else if(USER == who)
+                    {
+                        pointBoard[i][j] += pointsLow;
+                        pointBoard[i][j+2] += pointsHigh;
+                        pointBoard[i][j+4] += pointsLow;
+                    }
                 }
                 // --0-0
                 else if(gameBoard[i][j] == 0 && gameBoard[i][j+1] == 0 &&
-                        gameBoard[i][j+2] == CPU && gameBoard[i][j+3] == 0 && gameBoard[i][j+4] == CPU)
+                        gameBoard[i][j+2] == who && gameBoard[i][j+3] == 0 && gameBoard[i][j+4] == who)
                 {
-                    setGameBoardPoint(i,j+3);
-                    return true;
+                    if(CPU == who)
+                    {
+                        pointBoard[i][j] += pointsLow;
+                        pointBoard[i][j+1] += pointsHigh;
+                        pointBoard[i][j+3] += pointsLow;
+                    }
+                    else if(USER == who)
+                    {
+                        pointBoard[i][j] += pointsLow;
+                        pointBoard[i][j+1] += pointsLow;
+                        pointBoard[i][j+3] += pointsHigh;
+                    }
                 }
                 // 0-0--
-                else if(gameBoard[i][j] == CPU && gameBoard[i][j+1] == 0 &&
-                        gameBoard[i][j+2] == CPU && gameBoard[i][j+3] == 0 && gameBoard[i][j+4] == 0)
+                else if(gameBoard[i][j] == who && gameBoard[i][j+1] == 0 &&
+                        gameBoard[i][j+2] == who && gameBoard[i][j+3] == 0 && gameBoard[i][j+4] == 0)
                 {
-                    setGameBoardPoint(i,j+1);
-                    return true;
+                    if(CPU == who)
+                    {
+                        pointBoard[i][j+1] += pointsLow;
+                        pointBoard[i][j+3] += pointsHigh;
+                        pointBoard[i][j+4] += pointsLow;
+                    }
+                    else if(USER == who)
+                    {
+                        pointBoard[i][j+1] += pointsHigh;
+                        pointBoard[i][j+3] += pointsLow;
+                        pointBoard[i][j+4] += pointsLow;
+                    }
                 }
                 // 00---
-                else if(gameBoard[i][j] == CPU && gameBoard[i][j+1] == CPU &&
+                else if(gameBoard[i][j] == who && gameBoard[i][j+1] == who &&
                         gameBoard[i][j+2] == 0 && gameBoard[i][j+3] == 0 && gameBoard[i][j+4] == 0)
                 {
-                    setGameBoardPoint(i,j+2);
-                    return true;
+                    if(CPU == who)
+                    {
+                        pointBoard[i][j+2] += pointsLow;
+                        pointBoard[i][j+3] += pointsHigh;
+                        pointBoard[i][j+4] += pointsLow;
+                    }
+                    else if(USER == who)
+                    {
+                        pointBoard[i][j+2] += pointsHigh;
+                        pointBoard[i][j+3] += pointsLow;
+                        pointBoard[i][j+4] += pointsLow;
+                    }
                 }
                 // ---00
                 else if(gameBoard[i][j] == 0 && gameBoard[i][j+1] == 0 &&
-                        gameBoard[i][j+2] == 0 && gameBoard[i][j+3] == CPU && gameBoard[i][j+4] == CPU)
+                        gameBoard[i][j+2] == 0 && gameBoard[i][j+3] == who && gameBoard[i][j+4] == who)
                 {
-                    setGameBoardPoint(i,j+2);
-                    return true;
+                    if(CPU == who)
+                    {
+                        pointBoard[i][j] += pointsLow;
+                        pointBoard[i][j+1] += pointsHigh;
+                        pointBoard[i][j+2] += pointsLow;
+                    }
+                    else if(USER == who)
+                    {
+                        pointBoard[i][j] += pointsLow;
+                        pointBoard[i][j+1] += pointsLow;
+                        pointBoard[i][j+2] += pointsHigh;
+                    }
                 }
             }
         }
     }
-    return false;
 }
 
-bool Game::lookForCPUTwoVertical()
+void Game::lookForTwoVertical(const int &who, const int &pointsHigh, const int &pointsLow)
 {
     for(unsigned int i = 0; i < BOARD_SIZE; i++)
     {
@@ -1407,60 +1466,129 @@ bool Game::lookForCPUTwoVertical()
             {
                 // --OO-
                 if(gameBoard[j][i] == 0 && gameBoard[j+1][i] == 0 &&
-                   gameBoard[j+2][i] == CPU && gameBoard[j+3][i] == CPU && gameBoard[j+4][i] == 0)
+                   gameBoard[j+2][i] == who && gameBoard[j+3][i] == who && gameBoard[j+4][i] == 0)
                 {
-                    setGameBoardPoint(j+1,i);
-                    return true;
+                    if(CPU == who)
+                    {
+                        pointBoard[j][i] += pointsHigh;
+                        pointBoard[j+1][i] += pointsLow;
+                        pointBoard[j+4][i] += pointsLow;
+                    }
+                    else if(USER == who)
+                    {
+                        pointBoard[j][i] += pointsLow;
+                        pointBoard[j+1][i] += pointsHigh;
+                        pointBoard[j+4][i] += pointsHigh;
+                    }
                 }
                 // -OO--
-                else if(gameBoard[j][i] == 0 && gameBoard[j+1][i] == CPU &&
-                        gameBoard[j+2][i] == CPU && gameBoard[j+3][i] == 0 && gameBoard[j+4][i] == 0)
+                else if(gameBoard[j][i] == 0 && gameBoard[j+1][i] == who &&
+                        gameBoard[j+2][i] == who && gameBoard[j+3][i] == 0 && gameBoard[j+4][i] == 0)
                 {
-                    setGameBoardPoint(j+3,i);
-                    return true;
+                    if(CPU == who)
+                    {
+                        pointBoard[j][i] += pointsLow;
+                        pointBoard[j+3][i] += pointsLow;
+                        pointBoard[j+4][i] += pointsHigh;
+                    }
+                    else if(USER == who)
+                    {
+                        pointBoard[j][i] += pointsHigh;
+                        pointBoard[j+3][i] += pointsHigh;
+                        pointBoard[j+4][i] += pointsLow;
+                    }
                 }
                 // -0-0-
-                else if(gameBoard[j][i] == 0 && gameBoard[j+1][i] == CPU &&
-                        gameBoard[j+2][i] == 0 && gameBoard[j+3][i] == CPU && gameBoard[j+4][i] == 0)
+                else if(gameBoard[j][i] == 0 && gameBoard[j+1][i] == who &&
+                        gameBoard[j+2][i] == 0 && gameBoard[j+3][i] == who && gameBoard[j+4][i] == 0)
                 {
-                    setGameBoardPoint(j+2,i);
-                    return true;
+                    if(CPU == who)
+                    {
+                        pointBoard[j][i] += pointsHigh;
+                        pointBoard[j+2][i] += pointsLow;
+                        pointBoard[j+4][i] += pointsHigh;
+                    }
+                    else if(USER == who)
+                    {
+                        pointBoard[j][i] += pointsLow;
+                        pointBoard[j+2][i] += pointsHigh;
+                        pointBoard[j+4][i] += pointsLow;
+                    }
                 }
                 // --0-0
                 else if(gameBoard[j][i] == 0 && gameBoard[j+1][i] == 0 &&
-                        gameBoard[j+2][i] == CPU && gameBoard[j+3][i] == 0 && gameBoard[j+4][i] == CPU)
+                        gameBoard[j+2][i] == who && gameBoard[j+3][i] == 0 && gameBoard[j+4][i] == who)
                 {
-                    setGameBoardPoint(j+3,i);
-                    return true;
+                    if(CPU == who)
+                    {
+                        pointBoard[j][i] += pointsLow;
+                        pointBoard[j+1][i] += pointsHigh;
+                        pointBoard[j+3][i] += pointsLow;
+                    }
+                    else if(USER == who)
+                    {
+                        pointBoard[j][i] += pointsLow;
+                        pointBoard[j+1][i] += pointsLow;
+                        pointBoard[j+3][i] += pointsHigh;
+                    }
                 }
                 // 0-0--
-                else if(gameBoard[j][i] == CPU && gameBoard[j+1][i] == 0 &&
-                        gameBoard[j+2][i] == CPU && gameBoard[j+3][i] == 0 && gameBoard[j+4][i] == 0)
+                else if(gameBoard[j][i] == who && gameBoard[j+1][i] == 0 &&
+                        gameBoard[j+2][i] == who && gameBoard[j+3][i] == 0 && gameBoard[j+4][i] == 0)
                 {
-                    setGameBoardPoint(j+1,i);
-                    return true;
+                    if(CPU == who)
+                    {
+                        pointBoard[j+1][i] += pointsLow;
+                        pointBoard[j+3][i] += pointsHigh;
+                        pointBoard[j+4][i] += pointsLow;
+                    }
+                    else if(USER == who)
+                    {
+                        pointBoard[j+1][i] += pointsHigh;
+                        pointBoard[j+3][i] += pointsLow;
+                        pointBoard[j+4][i] += pointsLow;
+                    }
                 }
                 // 00---
-                else if(gameBoard[j][i] == CPU && gameBoard[j+1][i] == CPU &&
+                else if(gameBoard[j][i] == who && gameBoard[j+1][i] == who &&
                         gameBoard[j+2][i] == 0 && gameBoard[j+3][i] == 0 && gameBoard[j+4][i] == 0)
                 {
-                    setGameBoardPoint(j+2,i);
-                    return true;
+                    if(CPU == who)
+                    {
+                        pointBoard[j+2][i] += pointsLow;
+                        pointBoard[j+3][i] += pointsHigh;
+                        pointBoard[j+4][i] += pointsLow;
+                    }
+                    else if(USER == who)
+                    {
+                        pointBoard[j+2][i] += pointsHigh;
+                        pointBoard[j+3][i] += pointsLow;
+                        pointBoard[j+4][i] += pointsLow;
+                    }
                 }
                 // ---00
                 else if(gameBoard[j][i] == 0 && gameBoard[j+1][i] == 0 &&
-                        gameBoard[j+2][i] == 0 && gameBoard[j+3][i] == CPU && gameBoard[j+4][i] == CPU)
+                        gameBoard[j+2][i] == 0 && gameBoard[j+3][i] == who && gameBoard[j+4][i] == who)
                 {
-                    setGameBoardPoint(j+2,i);
-                    return true;
+                    if(CPU == who)
+                    {
+                        pointBoard[j][i] += pointsLow;
+                        pointBoard[j+1][i] += pointsHigh;
+                        pointBoard[j+2][i] += pointsLow;
+                    }
+                    else if(USER == who)
+                    {
+                        pointBoard[j][i] += pointsLow;
+                        pointBoard[j+1][i] += pointsLow;
+                        pointBoard[j+2][i] += pointsHigh;
+                    }
                 }
             }
         }
     }
-    return false;
 }
 
-bool Game::lookForCPUTwoDiagonal()
+void Game::lookForTwoDiagonal(const int &who, const int &pointsHigh, const int &pointsLow)
 {
     for(unsigned int i = 0; i < BOARD_SIZE; i++)
     {
@@ -1471,52 +1599,122 @@ bool Game::lookForCPUTwoDiagonal()
             {
                 // --OO-
                 if(gameBoard[i][j] == 0 && gameBoard[i+1][j+1] == 0 &&
-                   gameBoard[i+2][j+2] == CPU && gameBoard[i+3][j+3] == CPU && gameBoard[i+4][j+4] == 0)
+                   gameBoard[i+2][j+2] == who && gameBoard[i+3][j+3] == who && gameBoard[i+4][j+4] == 0)
                 {
-                    setGameBoardPoint(i+1,j+1);
-                    return true;
+                    if(CPU == who)
+                    {
+                        pointBoard[i][j] += pointsHigh;
+                        pointBoard[i+1][j+1] += pointsLow;
+                        pointBoard[i+4][j+4] += pointsLow;
+                    }
+                    else if(USER == who)
+                    {
+                        pointBoard[i][j] += pointsLow;
+                        pointBoard[i+1][j+1] += pointsHigh;
+                        pointBoard[i+4][j+4] += pointsHigh;
+                    }
                 }
                 // -OO--
-                else if(gameBoard[i][j] == 0 && gameBoard[i+1][j+1] == CPU &&
-                        gameBoard[i+2][j+2] == CPU && gameBoard[i+3][j+3] == 0 && gameBoard[i+4][j+4] == 0)
+                else if(gameBoard[i][j] == 0 && gameBoard[i+1][j+1] == who &&
+                        gameBoard[i+2][j+2] == who && gameBoard[i+3][j+3] == 0 && gameBoard[i+4][j+4] == 0)
                 {
-                    setGameBoardPoint(i+3,j+3);
-                    return true;
+                    if(CPU == who)
+                    {
+                        pointBoard[i][j] += pointsLow;
+                        pointBoard[i+3][j+3] += pointsLow;
+                        pointBoard[i+4][j+4] += pointsHigh;
+                    }
+                    else if(USER == who)
+                    {
+                        pointBoard[i][j] += pointsHigh;
+                        pointBoard[i+3][j+3] += pointsHigh;
+                        pointBoard[i+4][j+4] += pointsLow;
+                    }
                 }
                 // -0-0-
-                else if(gameBoard[i][j] == 0 && gameBoard[i+1][j+1] == CPU &&
-                        gameBoard[i+2][j+2] == 0 && gameBoard[i+3][j+3] == CPU && gameBoard[i+4][j+4] == 0)
+                else if(gameBoard[i][j] == 0 && gameBoard[i+1][j+1] == who &&
+                        gameBoard[i+2][j+2] == 0 && gameBoard[i+3][j+3] == who && gameBoard[i+4][j+4] == 0)
                 {
-                    setGameBoardPoint(i+2,j+2);
-                    return true;
+                    if(CPU == who)
+                    {
+                        pointBoard[i][j] += pointsHigh;
+                        pointBoard[i+2][j+2] += pointsLow;
+                        pointBoard[i+4][j+4] += pointsHigh;
+                    }
+                    else if(USER == who)
+                    {
+                        pointBoard[i][j] += pointsLow;
+                        pointBoard[i+2][j+2] += pointsHigh;
+                        pointBoard[i+4][j+4] += pointsLow;
+                    }
                 }
                 // --0-0
                 else if(gameBoard[i][j] == 0 && gameBoard[i+1][j+1] == 0 &&
-                        gameBoard[i+2][j+2] == CPU && gameBoard[i+3][j+3] == 0 && gameBoard[i+4][j+4] == CPU)
+                        gameBoard[i+2][j+2] == who && gameBoard[i+3][j+3] == 0 && gameBoard[i+4][j+4] == who)
                 {
-                    setGameBoardPoint(i+3,j+3);
-                    return true;
+                    if(CPU == who)
+                    {
+                        pointBoard[i][j] += pointsLow;
+                        pointBoard[i+1][j+1] += pointsHigh;
+                        pointBoard[i+3][j+3] += pointsLow;
+                    }
+                    else if(USER == who)
+                    {
+                        pointBoard[i][j] += pointsLow;
+                        pointBoard[i][j+1] += pointsLow;
+                        pointBoard[i][j+3] += pointsHigh;
+                    }
                 }
                 // 0-0--
-                else if(gameBoard[i][j] == CPU && gameBoard[i+1][j+1] == 0 &&
-                        gameBoard[i+2][j+2] == CPU && gameBoard[i+3][j+3] == 0 && gameBoard[i+4][j+4] == 0)
+                else if(gameBoard[i][j] == who && gameBoard[i+1][j+1] == 0 &&
+                        gameBoard[i+2][j+2] == who && gameBoard[i+3][j+3] == 0 && gameBoard[i+4][j+4] == 0)
                 {
-                    setGameBoardPoint(i+1,j+1);
-                    return true;
+                    if(CPU == who)
+                    {
+                        pointBoard[i+1][j+1] += pointsLow;
+                        pointBoard[i+3][j+3] += pointsHigh;
+                        pointBoard[i+4][j+4] += pointsLow;
+                    }
+                    else if(USER == who)
+                    {
+                        pointBoard[i+1][j+1] += pointsHigh;
+                        pointBoard[i+3][j+3] += pointsLow;
+                        pointBoard[i+4][j+4] += pointsLow;
+                    }
                 }
                 // 00---
-                else if(gameBoard[i][j] == CPU && gameBoard[i+1][j+1] == CPU &&
+                else if(gameBoard[i][j] == who && gameBoard[i+1][j+1] == who &&
                         gameBoard[i+2][j+2] == 0 && gameBoard[i+3][j+3] == 0 && gameBoard[i+4][j+4] == 0)
                 {
-                    setGameBoardPoint(i+2,j+2);
-                    return true;
+                    if(CPU == who)
+                    {
+                        pointBoard[i+2][j+2] += pointsLow;
+                        pointBoard[i+3][j+3] += pointsHigh;
+                        pointBoard[i+4][j+4] += pointsLow;
+                    }
+                    else if(USER == who)
+                    {
+                        pointBoard[i+2][j+2] += pointsHigh;
+                        pointBoard[i+3][j+3] += pointsLow;
+                        pointBoard[i+4][j+4] += pointsLow;
+                    }
                 }
                 // ---00
                 else if(gameBoard[i][j] == 0 && gameBoard[i+1][j+1] == 0 &&
-                        gameBoard[i+2][j+2] == 0 && gameBoard[i+3][j+3] == CPU && gameBoard[i+4][j+4] == CPU)
+                        gameBoard[i+2][j+2] == 0 && gameBoard[i+3][j+3] == who && gameBoard[i+4][j+4] == who)
                 {
-                    setGameBoardPoint(i+2,j+2);
-                    return true;
+                    if(CPU == who)
+                    {
+                        pointBoard[i][j] += pointsLow;
+                        pointBoard[i+1][j+1] += pointsHigh;
+                        pointBoard[i+2][j+2] += pointsLow;
+                    }
+                    else if(USER == who)
+                    {
+                        pointBoard[i][j] += pointsLow;
+                        pointBoard[i+1][j+1] += pointsLow;
+                        pointBoard[i+2][j+2] += pointsHigh;
+                    }
                 }
             }
             // lewy dolny, prawy gorny rog
@@ -1524,57 +1722,126 @@ bool Game::lookForCPUTwoDiagonal()
             {
                 // --OO-
                 if(gameBoard[i][j] == 0 && gameBoard[i-1][j+1] == 0 &&
-                   gameBoard[i-2][j+2] == CPU && gameBoard[i-3][j+3] == CPU && gameBoard[i-4][j+4] == 0)
+                   gameBoard[i-2][j+2] == who && gameBoard[i-3][j+3] == who && gameBoard[i-4][j+4] == 0)
                 {
-                    setGameBoardPoint(i-1,j+1);
-                    return true;
+                    if(CPU == who)
+                    {
+                        pointBoard[i][j] += pointsHigh;
+                        pointBoard[i-1][j+1] += pointsLow;
+                        pointBoard[i-4][j+4] += pointsLow;
+                    }
+                    else if(USER == who)
+                    {
+                        pointBoard[i][j] += pointsLow;
+                        pointBoard[i-1][j+1] += pointsHigh;
+                        pointBoard[i-4][j+4] += pointsHigh;
+                    }
                 }
                 // -OO--
-                else if(gameBoard[i][j] == 0 && gameBoard[i-1][j+1] == CPU &&
-                        gameBoard[i-2][j+2] == CPU && gameBoard[i-3][j+3] == 0 && gameBoard[i-4][j+4] == 0)
+                else if(gameBoard[i][j] == 0 && gameBoard[i-1][j+1] == who &&
+                        gameBoard[i-2][j+2] == who && gameBoard[i-3][j+3] == 0 && gameBoard[i-4][j+4] == 0)
                 {
-                    setGameBoardPoint(i-3,j+3);
-                    return true;
+                    if(CPU == who)
+                    {
+                        pointBoard[i][j] += pointsLow;
+                        pointBoard[i-3][j+3] += pointsLow;
+                        pointBoard[i-4][j+4] += pointsHigh;
+                    }
+                    else if(USER == who)
+                    {
+                        pointBoard[i][j] += pointsHigh;
+                        pointBoard[i-3][j+3] += pointsHigh;
+                        pointBoard[i-4][j+4] += pointsLow;
+                    }
                 }
                 // -0-0-
-                else if(gameBoard[i][j] == 0 && gameBoard[i-1][j+1] == CPU &&
-                        gameBoard[i-2][j+2] == 0 && gameBoard[i-3][j+3] == CPU && gameBoard[i-4][j+4] == 0)
+                else if(gameBoard[i][j] == 0 && gameBoard[i-1][j+1] == who &&
+                        gameBoard[i-2][j+2] == 0 && gameBoard[i-3][j+3] == who && gameBoard[i-4][j+4] == 0)
                 {
-                    setGameBoardPoint(i-2,j+2);
-                    return true;
+                    if(CPU == who)
+                    {
+                        pointBoard[i][j] += pointsHigh;
+                        pointBoard[i-2][j+2] += pointsLow;
+                        pointBoard[i-4][j+4] += pointsHigh;
+                    }
+                    else if(USER == who)
+                    {
+                        pointBoard[i][j] += pointsLow;
+                        pointBoard[i-2][j+2] += pointsHigh;
+                        pointBoard[i-4][j+4] += pointsLow;
+                    }
                 }
                 // --0-0
                 else if(gameBoard[i][j] == 0 && gameBoard[i-1][j+1] == 0 &&
-                        gameBoard[i-2][j+2] == CPU && gameBoard[i-3][j+3] == 0 && gameBoard[i-4][j+4] == CPU)
+                        gameBoard[i-2][j+2] == who && gameBoard[i-3][j+3] == 0 && gameBoard[i-4][j+4] == who)
                 {
-                    setGameBoardPoint(i-3,j+3);
-                    return true;
+                    if(CPU == who)
+                    {
+                        pointBoard[i][j] += pointsLow;
+                        pointBoard[i-1][j+1] += pointsHigh;
+                        pointBoard[i-3][j+3] += pointsLow;
+                    }
+                    else if(USER == who)
+                    {
+                        pointBoard[i][j] += pointsLow;
+                        pointBoard[i-1][j+1] += pointsLow;
+                        pointBoard[i-3][j+3] += pointsHigh;
+                    }
                 }
                 // 0-0--
-                else if(gameBoard[i][j] == CPU && gameBoard[i-1][j+1] == 0 &&
-                        gameBoard[i-2][j+2] == CPU && gameBoard[i-3][j+3] == 0 && gameBoard[i-4][j+4] == 0)
+                else if(gameBoard[i][j] == who && gameBoard[i-1][j+1] == 0 &&
+                        gameBoard[i-2][j+2] == who && gameBoard[i-3][j+3] == 0 && gameBoard[i-4][j+4] == 0)
                 {
-                    setGameBoardPoint(i-1,j+1);
-                    return true;
+                    if(CPU == who)
+                    {
+                        pointBoard[i-1][j+1] += pointsLow;
+                        pointBoard[i-3][j+3] += pointsHigh;
+                        pointBoard[i-4][j+4] += pointsLow;
+                    }
+                    else if(USER == who)
+                    {
+                        pointBoard[i-1][j+1] += pointsHigh;
+                        pointBoard[i-3][j+3] += pointsLow;
+                        pointBoard[i-4][j+4] += pointsLow;
+                    }
                 }
                 // 00---
-                else if(gameBoard[i][j] == CPU && gameBoard[i-1][j+1] == CPU &&
+                else if(gameBoard[i][j] == who && gameBoard[i-1][j+1] == who &&
                         gameBoard[i-2][j+2] == 0 && gameBoard[i-3][j+3] == 0 && gameBoard[i-4][j+4] == 0)
                 {
-                    setGameBoardPoint(i-2,j+2);
-                    return true;
+                    if(CPU == who)
+                    {
+                        pointBoard[i-2][j+2] += pointsLow;
+                        pointBoard[i-3][j+3] += pointsHigh;
+                        pointBoard[i-4][j+4] += pointsLow;
+                    }
+                    else if(USER == who)
+                    {
+                        pointBoard[i-2][j+2] += pointsHigh;
+                        pointBoard[i-3][j+3] += pointsLow;
+                        pointBoard[i-4][j+4] += pointsLow;
+                    }
                 }
                 // ---00
                 else if(gameBoard[i][j] == 0 && gameBoard[i-1][j+1] == 0 &&
-                        gameBoard[i-2][j+2] == 0 && gameBoard[i-3][j+3] == CPU && gameBoard[i-4][j+4] == CPU)
+                        gameBoard[i-2][j+2] == 0 && gameBoard[i-3][j+3] == who && gameBoard[i-4][j+4] == who)
                 {
-                    setGameBoardPoint(i-2,j+2);
-                    return true;
+                    if(CPU == who)
+                    {
+                        pointBoard[i][j] += pointsLow;
+                        pointBoard[i-1][j+1] += pointsHigh;
+                        pointBoard[i-2][j+2] += pointsLow;
+                    }
+                    else if(USER == who)
+                    {
+                        pointBoard[i][j] += pointsLow;
+                        pointBoard[i-1][j+1] += pointsLow;
+                        pointBoard[i-2][j+2] += pointsHigh;
+                    }
                 }
             }
         }
     }
-    return false;
 }
 
 bool Game::lookForCPUSingle()
