@@ -39,4 +39,11 @@ static const int CPU_2_LOW = 10;
 static const int USER_2_HIGH = 20;
 static const int USER_2_LOW = 10;
 
+static const int CPU_1_HIGH = 20;
+static const int CPU_1_MEDIUM = 10;
+static const int CPU_1_LOW = 5;
+static const int USER_1_HIGH = 20;
+static const int USER_1_MEDIUM = 10;
+static const int USER_1_LOW = 5;
+
 #endif // CONSTANTS_H

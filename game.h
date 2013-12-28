@@ -47,8 +47,6 @@ private:
     void makeCPUMove(int i, int j);
     void makeUserMove(std::pair<int, int> boardPoint, const int &row, const int &col);
 
-    void buildThreat();
-
     void lookForFour();
     void lookForFourVertical(const int &who, const int &points);
     void lookForFourHorizontal(const int &who, const int &points);
@@ -64,9 +62,9 @@ private:
     void lookForThreeHorizontal1Priority(const int &who, const int &pointsHigh, const int &pointsLow);
     void lookForThreeDiagonal1Priority(const int &who, const int &pointsHigh, const int &pointsLow);
 
-    void lookForThreeVertical2Priority(const int &who, const int &pointsHigh, const inst &pointsMedium, const int &pointsLow);
-    void lookForThreeHorizontal2Priority(const int &who, const int &pointsHigh, const inst &pointsMedium, const int &pointsLow);
-    void lookForThreeDiagonal2Priority(const int &who, const int &pointsHigh, const inst &pointsMedium, const int &pointsLow);
+    void lookForThreeVertical2Priority(const int &who, const int &pointsHigh, const int &pointsMedium, const int &pointsLow);
+    void lookForThreeHorizontal2Priority(const int &who, const int &pointsHigh, const int &pointsMedium, const int &pointsLow);
+    void lookForThreeDiagonal2Priority(const int &who, const int &pointsHigh, const int &pointsMedium, const int &pointsLow);
 
     void lookForThreeVertical3Priority(const int &who, const int &pointsHigh, const int &pointsLow);
     void lookForThreeHorizontal3Priority(const int &who, const int &pointsHigh, const int &pointsLow);
@@ -81,15 +79,10 @@ private:
     void lookForTwoHorizontal(const int &who, const int &pointsHigh, const int &pointsLow);
     void lookForTwoDiagonal(const int &who, const int &pointsHigh, const int &pointsLow);
 
-    bool lookForCPUSingle();
-    bool lookForCPUSingleHorizontal();
-    bool lookForCPUSingleVertical();
-    bool lookForCPUSingleDiagonal();
-
-    bool lookForOpponentSingle();
-    bool lookForOpponentSingleHorizontal();
-    bool lookForOpponentSingleVertical();
-    bool lookForOpponentSingleDiagonal();
+    void lookForSingle();
+    void lookForSingleVertical(const int &who, const int &pointsHigh, const int &pointsMedium, const int &pointsLow);
+    void lookForSingleHorizontal(const int &who, const int &pointsHigh, const int &pointsMedium, const int &pointsLow);
+    void lookForSingleDiagonal(const int &who, const int &pointsHigh, const int &pointsMedium, const int &pointsLow);
 
     bool gameFinished;
     void setGameFinished(const bool &value);
@@ -103,7 +96,7 @@ private:
 
     std::vector< std::vector<int> > pointBoard;
     void cleanPointBoard();
-
+    void findMaxInPointBoard();
 };
 
 #endif // GAME_H
